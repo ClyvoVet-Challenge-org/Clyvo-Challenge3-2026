@@ -1,10 +1,15 @@
 package com.example.clyvo_challenge3.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,8 +26,10 @@ public class Clinica {
 
     @Column(name = "nm_clinica", nullable = false, length = 100)
     private String nome;
+
     
-    
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "clinica")
+    private List<ClinicaVeterinario> veterinarios;
 
     public Clinica() {
         super();
@@ -58,4 +65,14 @@ public class Clinica {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+	public List<ClinicaVeterinario> getVeterinarios() {
+		return veterinarios;
+	}
+
+	public void setVeterinarios(List<ClinicaVeterinario> veterinarios) {
+		this.veterinarios = veterinarios;
+	}
+    
+    
 }

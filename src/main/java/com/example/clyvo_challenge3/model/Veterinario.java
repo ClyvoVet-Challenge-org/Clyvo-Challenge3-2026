@@ -4,9 +4,11 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,8 +36,11 @@ public class Veterinario {
     private String senha;
     
     
-    private List<Clinica> clinicas;
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "veterinario")
+    private List<ClinicaVeterinario> clinicas;
 
+    
+    
     public Veterinario() {
         super();
     }
@@ -98,13 +103,15 @@ public class Veterinario {
         this.senha = senha;
     }
 
-	public List<Clinica> getClinicas() {
+	public List<ClinicaVeterinario> getClinicas() {
 		return clinicas;
 	}
 
-	public void setClinicas(List<Clinica> clinicas) {
+	public void setClinicas(List<ClinicaVeterinario> clinicas) {
 		this.clinicas = clinicas;
 	}
+
+
     
     
 }

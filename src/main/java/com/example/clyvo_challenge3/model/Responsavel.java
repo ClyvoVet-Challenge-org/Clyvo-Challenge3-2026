@@ -21,13 +21,13 @@ public class Responsavel {
 	@Column(name = "id_responsavel")
 	private Long id;
 	
-	@Column(name = "nm_responsavel", nullable = false, length = 100)
+	@Column(name = "nm_responsavel", nullable = false, length = 100) // Obrigatório
 	private String nome;
-	@Column(name = "cpf_responsavel", nullable = false, unique = true, length = 14)
+	@Column(name = "cpf_responsavel", nullable = false, unique = true, length = 14) // Obrigatório
 	private String cpf;
-	@Column(name = "nr_telefone_responsavel", nullable = false, length = 20)
+	@Column(name = "nr_telefone_responsavel", nullable = false, length = 20) // Obrigatório
 	private String numeroTelefone;
-	@Column(name = "ds_email", length = 100)
+	@Column(name = "ds_email", length = 100, nullable = false) // Obrigatório
 	private String email;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "responsavel")

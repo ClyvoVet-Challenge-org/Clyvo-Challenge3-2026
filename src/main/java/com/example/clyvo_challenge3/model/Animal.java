@@ -21,25 +21,25 @@ public class Animal {
 	@Column(name = "id_animal")
 	private Long id;
 	
-	@Column(name = "nm_animal", nullable = false, length = 100)
+	@Column(name = "nm_animal", nullable = false, length = 100) //Obrigatório
 	private String nome;
 	
-	@Column(name = "dt_nascimento_animal", nullable = false)
+	@Column(name = "dt_nascimento_animal", nullable = false) // Obrigatório
 	private LocalDate dataNascimento;
 	
-	@Column(name = "peso_animal", nullable = false, precision = 5, scale = 2)
+	@Column(name = "peso_animal", nullable = false, precision = 5, scale = 2) //Obrigatório
 	private Double peso;
 	
-	@Column(name = "especie_animal", nullable = false, length = 50)
+	@Column(name = "especie_animal", nullable = false, length = 50) // Obrigatório
 	private String especie;
 	
-	@Column(name = "raca_animal", nullable = false, length = 50)
+	@Column(name = "raca_animal", nullable = false, length = 50) // Obrigatório
 	private String raca;
 	
-	@Column(name = "rg_animal", length = 20,unique = true)
+	@Column(name = "rg_animal", length = 20,unique = true, nullable = false) // Obrigatório
 	private String rg;
 	
-	@Column(name = "nr_microchip_animal", length = 20,unique = true)
+	@Column(name = "nr_microchip_animal", length = 20,unique = true, nullable= false) // Obrigatório
 	private String numeroMicrochip;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -48,7 +48,7 @@ public class Animal {
 
 	
 	
-	public Animal() {
+	public Animal() {	
 		super();
 	}
 
