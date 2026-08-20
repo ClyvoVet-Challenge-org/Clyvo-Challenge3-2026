@@ -1,0 +1,17 @@
+package com.example.clyvo_challenge3.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "T_CLYVO_ENDERECO_CLINICA")
+public class EnderecoClinica {
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_clinica",nullable = false,unique = false)
+	private Clinica clinica;
+
+}

@@ -1,6 +1,8 @@
 package com.example.clyvo_challenge3.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -27,7 +30,7 @@ public class Animal {
 	@Column(name = "dt_nascimento_animal", nullable = false) // Obrigatório
 	private LocalDate dataNascimento;
 	
-	@Column(name = "peso_animal", nullable = false, precision = 5, scale = 2) //Obrigatório
+	@Column(name = "peso_animal", nullable = false, precision = 5) //Obrigatório
 	private Double peso;
 	
 	@Column(name = "especie_animal", nullable = false, length = 50) // Obrigatório
@@ -46,7 +49,8 @@ public class Animal {
     @JoinColumn(name = "id_responsavel", nullable = false)
 	private Responsavel responsavel;
 
-	
+	@OneToMany(mappedBy = "animal", fetch = FetchType.LAZY)
+	private List<Vacinacao> vacinacoes = new ArrayList<>();
 	
 	public Animal() {	
 		super();
@@ -138,7 +142,13 @@ public class Animal {
 		this.responsavel = responsavel;
 	}
 	
-	
+	public List<Vacinacao> getVacinacoes() {
+	    return vacinacoes;
+	}
+
+	public void setVacinacoes(List<Vacinacao> vacinacoes) {
+	    this.vacinacoes = vacinacoes;
+	}
 	
 	
 }

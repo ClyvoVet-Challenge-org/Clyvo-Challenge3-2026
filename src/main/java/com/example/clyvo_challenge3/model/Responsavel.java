@@ -29,7 +29,6 @@ public class Responsavel {
 	private String numeroTelefone;
 	@Column(name = "ds_email", length = 100, nullable = false) // Obrigatório
 	private String email;
-	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "responsavel")
 	private List<Animal> animais;
 	
