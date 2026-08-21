@@ -24,7 +24,7 @@ public class EnderecoBase {
 	private String cidade;
 	@Column(length = 20,nullable = false)
 	private String bairro;
-	@Column(length = 20,nullable = false)
+	@Column(length = 50,nullable = false)
 	private String logradouro;
 	@Column(name = "nr_rua", length = 15, nullable = false)
 	private String numeroRua;
