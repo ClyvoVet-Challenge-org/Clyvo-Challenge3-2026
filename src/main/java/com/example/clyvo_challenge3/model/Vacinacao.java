@@ -34,7 +34,7 @@ public class Vacinacao {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "st_vacinacao", length = 20,nullable=false)
-    private StatusVacinacaoEnum statusVacinacao; // Ex: 'EFETUADA', 'PENDENTE', 'ATRASADA', 'CANCELADA'
+    private StatusVacinacaoEnum statusVacinacao; 
 
     // Relacionamento com Animal (Muitas vacinações para Um Animal)
     @ManyToOne(fetch = FetchType.LAZY)
