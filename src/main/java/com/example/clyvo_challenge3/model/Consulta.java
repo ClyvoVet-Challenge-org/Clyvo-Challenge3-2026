@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +27,8 @@ public class Consulta {
     private String historico;
 
     @Column(name = "st_consulta", nullable = false, length = 20)
-    private String statusConsulta; // 'passada', 'execução', 'futura', 'cancelada'
+    @Enumerated(EnumType.STRING)
+    private StatusConsultaEnum statusConsulta; 
 
     @Column(name = "dt_consulta", nullable = false)
     private LocalDate dataConsulta;
@@ -44,15 +47,6 @@ public class Consulta {
         super();
     }
 
-    public Consulta(Long id, String historico, String statusConsulta, LocalDate dataConsulta, Veterinario veterinario, Animal animal) {
-        super();
-        this.id = id;
-        this.historico = historico;
-        this.statusConsulta = statusConsulta;
-        this.dataConsulta = dataConsulta;
-        this.veterinario = veterinario;
-        this.animal = animal;
-    }
 
     public Long getId() {
         return id;
@@ -68,14 +62,6 @@ public class Consulta {
 
     public void setHistorico(String historico) {
         this.historico = historico;
-    }
-
-    public String getStatusConsulta() {
-        return statusConsulta;
-    }
-
-    public void setStatusConsulta(String statusConsulta) {
-        this.statusConsulta = statusConsulta;
     }
 
     public LocalDate getDataConsulta() {

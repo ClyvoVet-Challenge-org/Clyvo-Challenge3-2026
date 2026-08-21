@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "T_CLYVO_ENDERECO_CLINICA")
-public class EnderecoClinica {
+public class EnderecoClinica extends EnderecoBase{
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_clinica",nullable = false,unique = false)

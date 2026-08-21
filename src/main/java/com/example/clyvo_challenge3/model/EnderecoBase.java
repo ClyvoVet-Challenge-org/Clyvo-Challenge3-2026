@@ -9,17 +9,16 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.MappedSuperclass;
 
-@Entity
 @MappedSuperclass
-public class EnderecoGeral {
+public class EnderecoBase {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length = 20)
+	@Column(length = 20,nullable = false)
 	private String pais;
-	@Column(length = 20)
+	@Column(length = 20, nullable = false)
 	private String estado;
 	@Column(length = 20,nullable = false)
 	private String cidade;
@@ -27,7 +26,7 @@ public class EnderecoGeral {
 	private String bairro;
 	@Column(length = 20,nullable = false)
 	private String logradouro;
-	@Column(name = "nr_rua", length = 5, nullable = false)
+	@Column(name = "nr_rua", length = 15, nullable = false)
 	private String numeroRua;
 	@Column(length = 20 ,nullable = false)
 	private String complemento;
@@ -35,24 +34,6 @@ public class EnderecoGeral {
 	private String cep;
 	
 	
-
-	public EnderecoGeral() {
-		super();
-	}
-
-	public EnderecoGeral(Long id, String pais, String estado, String cidade, String bairro, String logradouro,
-			String numeroRua, String complemento, String cep) {
-		super();
-		this.id = id;
-		this.pais = pais;
-		this.estado = estado;
-		this.cidade = cidade;
-		this.bairro = bairro;
-		this.logradouro = logradouro;
-		this.numeroRua = numeroRua;
-		this.complemento = complemento;
-		this.cep = cep;
-	}
 
 	public Long getId() {
 		return id;
