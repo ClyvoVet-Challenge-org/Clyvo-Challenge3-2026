@@ -21,7 +21,7 @@ public class ResponsavelController {
 	private ResponsavelRepository repResponsavel;
 	
 	@GetMapping("/responsaveis")
-	public ModelAndView todosUsuarios() {
+	public ModelAndView paginaListagemResponsaveis() {
 		ModelAndView mv = new ModelAndView("/responsavel/all");
 		 
 		List<Responsavel> responsaveis = repResponsavel.findAll();
@@ -32,11 +32,12 @@ public class ResponsavelController {
 	}
 	
 	@GetMapping("/responsaveis/{id}")
-	public ModelAndView exibirDetalhes(@PathVariable Long id){
+	public ModelAndView paginaDetalhes(@PathVariable Long id){
 		ModelAndView mv = new ModelAndView("/responsavel/detalhes");
 		
 		Optional<Responsavel> op = repResponsavel.findById(id);
 		
+
 		if (op.isPresent()) {
 			mv.addObject("responsavel", op.get());
 			
@@ -44,6 +45,8 @@ public class ResponsavelController {
 			
 		}
 		
+		
+		// Usuario Inexistente
 		return new ModelAndView("redirect:/responsaveis");
 	}
 	
@@ -55,10 +58,10 @@ public class ResponsavelController {
 		
 		if (op.isPresent()) {
 		
-		ModelAndView mv = new ModelAndView("/responsavel/edicao");
-		mv.addObject("responsavel", op.get());
+			ModelAndView mv = new ModelAndView("/responsavel/edicao");
+			mv.addObject("responsavel", op.get());
 	
-		return mv;
+			return mv;
 		}
 		
 		return new ModelAndView("redirect:/responsaveis");
@@ -73,6 +76,7 @@ public class ResponsavelController {
 			Responsavel responsavel_banco = op.get();
 			responsavel_banco.setNome(responsavel.getNome());
 			repResponsavel.save(responsavel_banco);
+			
 			return new ModelAndView("redirect:/responsaveis/{id}");
 		}
 		return new ModelAndView("redirect:/responsaveis");

@@ -15,7 +15,7 @@
         </div>
         <div class="row">
             
-            <form th:object="${responsavel}" action="@{/responsaveis/atualizar/{idDiscente}(idDiscente = ${responsavel.id})}" method="post">
+            <form th:object="${responsavel}" th:action="@{/responsaveis/atualizar/{idResponsavel}(idResponsavel = ${responsavel.id})}" method="post">
             
             Nome: <input class="form-control" type="text" th:field="*{nome}"><br>
 

@@ -18,6 +18,9 @@
                             <th scope="col">CPF</th>
                             <th scope="col">n° Telefone</th>
                             <th scope="col">Email</th>
+                            <th scope="col">#</th>
+                            <th scope="col">#</th>
+                            <th scope="col">#</th>
                         </tr>
                       </thead>
                     <tbody>
@@ -26,6 +29,10 @@
                             <td class="col-3" th:text="${responsavel.cpf}">B</td>
                             <td class="col-3" th:text="${responsavel.numeroTelefone}">C</td>
                             <td class="col-3" th:text="${responsavel.email}">D</td>
+                            <td class="col-3"><a th:href="@{/responsaveis/{idResponsavel}(idResponsavel= ${responsavel.id})}">Detalhes</a></td>
+                            <td class="col-3"><a th:href="@{/responsaveis/edicao/{idResponsavel}(idResponsavel = ${responsavel.id})}">Editar</a></td>
+                            <td class="col-3"><a th:href="@{/responsavel/remocao/{idResponsavel}(idResponsavel= ${responsavel.id})}">Remover</a></td>
+
                        </tr>
                     </tbody>
                 </table>
