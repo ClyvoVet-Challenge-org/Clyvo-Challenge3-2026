@@ -1,7 +1,9 @@
 package com.example.clyvo_challenge3.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 
 
@@ -29,8 +33,12 @@ public class Responsavel {
 	private String numeroTelefone;
 	@Column(name = "ds_email", length = 100, nullable = false) // Obrigatório
 	private String email;
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "responsavel")
-	private List<Animal> animais;
+	private List<Animal> animais = new ArrayList<Animal>();
+
+	@OneToOne(mappedBy = "responsavel",fetch = FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.PERSIST, CascadeType.MERGE})
+	private EnderecoResponsavel enderecoResponsavel;
 	
 
 	public Responsavel() {
@@ -46,7 +54,13 @@ public class Responsavel {
 		this.numeroTelefone = numeroTelefone;
 		this.email = email;
 	}
-
+	
+	public void transferirResponsavel(Responsavel responsavel) {
+		this.nome = responsavel.nome;
+		this.cpf = responsavel.cpf;
+		this.email = responsavel.email;
+		this.numeroTelefone = responsavel.numeroTelefone;
+	}
 
 	public Long getId() {
 		return id;

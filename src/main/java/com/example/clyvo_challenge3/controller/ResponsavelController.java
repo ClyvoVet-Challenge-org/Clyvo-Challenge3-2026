@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.clyvo_challenge3.model.Animal;
 import com.example.clyvo_challenge3.model.Responsavel;
 import com.example.clyvo_challenge3.repository.ResponsavelRepository;
 
@@ -39,8 +40,10 @@ public class ResponsavelController {
 		
 
 		if (op.isPresent()) {
-			mv.addObject("responsavel", op.get());
-			
+			Responsavel responsavel = op.get();
+			mv.addObject("responsavel",responsavel);
+			List<Animal> animais = responsavel.getAnimais();
+			mv.addObject("animais",animais);			
 			return mv;
 			
 		}
@@ -74,13 +77,25 @@ public class ResponsavelController {
 		if (op.isPresent()) {
 
 			Responsavel responsavel_banco = op.get();
-			responsavel_banco.setNome(responsavel.getNome());
+
+			responsavel_banco.transferirResponsavel(responsavel);
 			repResponsavel.save(responsavel_banco);
 			
 			return new ModelAndView("redirect:/responsaveis/{id}");
 		}
 		return new ModelAndView("redirect:/responsaveis");
 		
+	}
+	
+	@GetMapping("/responsaveis/remover/{id}")
+	public ModelAndView funcaoRemoverResponsavel(@PathVariable Long id) {
+		Optional<Responsavel> op = repResponsavel.findById(id);
+		 
+		if (op.isPresent()) {
+			repResponsavel.deleteById(id);
+		}
+		
+		return new ModelAndView("redirect:/responsaveis");
 	}
 
 }

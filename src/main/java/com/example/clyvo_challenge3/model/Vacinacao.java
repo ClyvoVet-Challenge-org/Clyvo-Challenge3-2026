@@ -38,7 +38,7 @@ public class Vacinacao {
 
     // Relacionamento com Animal (Muitas vacinações para Um Animal)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_animal", nullable = false)
+    @JoinColumn(name = "id_animal", nullable = false,unique=false)
     private Animal animal;
 
     public Vacinacao() {

@@ -3,6 +3,7 @@ package com.example.clyvo_challenge3.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,6 +21,7 @@ public class Prescricao {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_prescricao")
 	private Long id;
 	
 	@Column(name = "dt_emissao",nullable = false)
@@ -38,6 +40,6 @@ public class Prescricao {
 	private Consulta consulta;
 
 	
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "prescricao")
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "prescricao",cascade = CascadeType.ALL)
 	private List<Medicamento> medicamentos;
 }

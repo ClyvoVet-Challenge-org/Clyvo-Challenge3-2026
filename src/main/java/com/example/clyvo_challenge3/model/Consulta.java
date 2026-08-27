@@ -2,6 +2,7 @@ package com.example.clyvo_challenge3.model;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -35,13 +37,16 @@ public class Consulta {
 
     // Relacionamento com Veterinário (Muitas consultas para Um Veterinário)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_vet", nullable = false)
+    @JoinColumn(name = "id_vet", nullable = false,unique = false)
     private Veterinario veterinario;
 
     // Relacionamento com Animal (Muitas consultas para Um Animal)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_animal", nullable = false)
+    @JoinColumn(name = "id_animal", nullable = false,unique= false)
     private Animal animal;
+    
+    @OneToOne(mappedBy = "consulta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Prescricao prescricao;
 
     public Consulta() {
         super();

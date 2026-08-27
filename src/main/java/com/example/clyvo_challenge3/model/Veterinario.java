@@ -1,5 +1,6 @@
 package com.example.clyvo_challenge3.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -37,7 +38,10 @@ public class Veterinario {
     
     
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "veterinario")
-    private List<ClinicaVeterinario> clinicas;
+    private List<ClinicaVeterinario> clinicas = new ArrayList<ClinicaVeterinario>();
+    
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "veterinario")
+    private List<Consulta> consultas = new ArrayList<Consulta>();
 
     
     
