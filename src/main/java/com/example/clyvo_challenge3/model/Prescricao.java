@@ -1,6 +1,7 @@
 package com.example.clyvo_challenge3.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -40,6 +41,6 @@ public class Prescricao {
 	private Consulta consulta;
 
 	
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "prescricao",cascade = CascadeType.ALL)
-	private List<Medicamento> medicamentos;
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "prescricao",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private List<Medicamento> medicamentos =new ArrayList<Medicamento>();
 }

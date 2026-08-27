@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 
 
@@ -33,11 +32,18 @@ public class Responsavel {
 	private String numeroTelefone;
 	@Column(name = "ds_email", length = 100, nullable = false) // Obrigatório
 	private String email;
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "responsavel")
 	private List<Animal> animais = new ArrayList<Animal>();
 
-	@OneToOne(mappedBy = "responsavel",fetch = FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToOne(
+			mappedBy = "responsavel",
+			fetch = FetchType.LAZY,
+			cascade = {
+					CascadeType.PERSIST, // Permitir a criacao de um responsavel com endereco setado;
+					CascadeType.MERGE // Ao realizar a edicao de um responsavel, é possível editar o Endereco associado;
+					}
+			)
 	private EnderecoResponsavel enderecoResponsavel;
 	
 

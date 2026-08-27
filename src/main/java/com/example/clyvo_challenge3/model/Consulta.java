@@ -20,76 +20,91 @@ import jakarta.persistence.Table;
 @Table(name = "T_CLYVO_CONSULTA")
 public class Consulta {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_consulta")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_consulta")
+	private Long id;
 
-    @Column(name = "historico_consulta", nullable = false, length = 200)
-    private String historico;
+	@Column(name = "historico_consulta", nullable = false, length = 200)
+	private String historico;
 
-    @Column(name = "st_consulta", nullable = false, length = 20)
-    @Enumerated(EnumType.STRING)
-    private StatusConsultaEnum statusConsulta; 
+	@Column(name = "st_consulta", nullable = false, length = 20)
+	@Enumerated(EnumType.STRING)
+	private StatusConsultaEnum statusConsulta;
 
-    @Column(name = "dt_consulta", nullable = false)
-    private LocalDate dataConsulta;
+	@Column(name = "dt_consulta", nullable = false)
+	private LocalDate dataConsulta;
 
-    // Relacionamento com Veterinário (Muitas consultas para Um Veterinário)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_vet", nullable = false,unique = false)
-    private Veterinario veterinario;
+	// Relacionamento com Veterinário (Muitas consultas para Um Veterinário)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_vet_cli", nullable = false, unique = false)
+	private ClinicaVeterinario veterinarioClinica;
 
-    // Relacionamento com Animal (Muitas consultas para Um Animal)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_animal", nullable = false,unique= false)
-    private Animal animal;
-    
-    @OneToOne(mappedBy = "consulta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Prescricao prescricao;
+	// Relacionamento com Animal (Muitas consultas para Um Animal)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_animal", nullable = false, unique = false)
+	private Animal animal;
 
-    public Consulta() {
-        super();
-    }
+	@OneToOne(mappedBy = "consulta", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	private Prescricao prescricao;
 
+	public Consulta() {
+		super();
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getHistorico() {
-        return historico;
-    }
+	public String getHistorico() {
+		return historico;
+	}
 
-    public void setHistorico(String historico) {
-        this.historico = historico;
-    }
+	public void setHistorico(String historico) {
+		this.historico = historico;
+	}
 
-    public LocalDate getDataConsulta() {
-        return dataConsulta;
-    }
+	public LocalDate getDataConsulta() {
+		return dataConsulta;
+	}
 
-    public void setDataConsulta(LocalDate dataConsulta) {
-        this.dataConsulta = dataConsulta;
-    }
+	public void setDataConsulta(LocalDate dataConsulta) {
+		this.dataConsulta = dataConsulta;
+	}
 
-    public Veterinario getVeterinario() {
-        return veterinario;
-    }
+	public StatusConsultaEnum getStatusConsulta() {
+		return statusConsulta;
+	}
 
-    public void setVeterinario(Veterinario veterinario) {
-        this.veterinario = veterinario;
-    }
+	public void setStatusConsulta(StatusConsultaEnum statusConsulta) {
+		this.statusConsulta = statusConsulta;
+	}
 
-    public Animal getAnimal() {
-        return animal;
-    }
+	public ClinicaVeterinario getVeterinarioClinica() {
+		return veterinarioClinica;
+	}
 
-    public void setAnimal(Animal animal) {
-        this.animal = animal;
-    }
+	public void setVeterinarioClinica(ClinicaVeterinario veterinarioClinica) {
+		this.veterinarioClinica = veterinarioClinica;
+	}
+
+	public Prescricao getPrescricao() {
+		return prescricao;
+	}
+
+	public void setPrescricao(Prescricao prescricao) {
+		this.prescricao = prescricao;
+	}
+
+	public Animal getAnimal() {
+		return animal;
+	}
+
+	public void setAnimal(Animal animal) {
+		this.animal = animal;
+	}
 }

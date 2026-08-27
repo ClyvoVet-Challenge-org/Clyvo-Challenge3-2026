@@ -14,4 +14,14 @@ public class EnderecoClinica extends EnderecoBase{
 	@JoinColumn(name = "id_clinica",nullable = false,unique = false)
 	private Clinica clinica;
 
+	public Clinica getClinica() {
+		return clinica;
+	}
+
+	public void setClinica(Clinica clinica) {
+		this.clinica = clinica;
+	}
+	
+	
+
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,7 +25,7 @@ public class ClinicaVeterinario {
     private Veterinario veterinario;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_clinica", nullable = true) // Opcional (0:N)
+    @JoinColumn(name = "id_clinica", nullable = false)
     private Clinica clinica;
 
     public ClinicaVeterinario() {

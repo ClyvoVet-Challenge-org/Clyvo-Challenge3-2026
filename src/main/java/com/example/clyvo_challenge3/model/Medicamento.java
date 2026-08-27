@@ -48,6 +48,89 @@ public class Medicamento {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_prescricao",nullable = false)
 	private Prescricao prescricao;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public Integer getQuantidadeMedicamento() {
+		return quantidadeMedicamento;
+	}
+
+	public void setQuantidadeMedicamento(Integer quantidadeMedicamento) {
+		this.quantidadeMedicamento = quantidadeMedicamento;
+	}
+
+	public Integer getQuantidadeDias() {
+		return quantidadeDias;
+	}
+
+	public void setQuantidadeDias(Integer quantidadeDias) {
+		this.quantidadeDias = quantidadeDias;
+	}
+
+	public BigDecimal getDose() {
+		return dose;
+	}
+
+	public void setDose(BigDecimal dose) {
+		this.dose = dose;
+	}
+
+	public String getUnidadeDose() {
+		return unidadeDose;
+	}
+
+	public void setUnidadeDose(String unidadeDose) {
+		this.unidadeDose = unidadeDose;
+	}
+
+	public Integer getFrequencia() {
+		return frequencia;
+	}
+
+	public void setFrequencia(Integer frequencia) {
+		this.frequencia = frequencia;
+	}
+
+	public String getUnidadeFrequencia() {
+		return unidadeFrequencia;
+	}
+
+	public void setUnidadeFrequencia(String unidadeFrequencia) {
+		this.unidadeFrequencia = unidadeFrequencia;
+	}
+
+	public FormaFarmaceuticaEnum getFormaFarmaceutica() {
+		return formaFarmaceutica;
+	}
+
+	public void setFormaFarmaceutica(FormaFarmaceuticaEnum formaFarmaceutica) {
+		this.formaFarmaceutica = formaFarmaceutica;
+	}
+
+	public Prescricao getPrescricao() {
+		return prescricao;
+	}
+
+	public void setPrescricao(Prescricao prescricao) {
+		this.prescricao = prescricao;
+	}
+	
+	
+	
 	
 
 }

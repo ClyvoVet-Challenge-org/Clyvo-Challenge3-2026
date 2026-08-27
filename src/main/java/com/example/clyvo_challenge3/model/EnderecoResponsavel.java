@@ -14,4 +14,17 @@ public class EnderecoResponsavel extends EnderecoBase {
 	@JoinColumn(name = "id_responsavel",nullable = false,unique = true)
 	private Responsavel responsavel;
 	
+	
+
+	public Responsavel getResponsavel() {
+		return responsavel;
+	}
+
+	public void setResponsavel(Responsavel responsavel) {
+		this.responsavel = responsavel;
+	}
+	
+	
+	
+	
 }

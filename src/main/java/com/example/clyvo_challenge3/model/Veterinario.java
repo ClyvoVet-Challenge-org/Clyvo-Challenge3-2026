@@ -39,9 +39,6 @@ public class Veterinario {
     
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "veterinario")
     private List<ClinicaVeterinario> clinicas = new ArrayList<ClinicaVeterinario>();
-    
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "veterinario")
-    private List<Consulta> consultas = new ArrayList<Consulta>();
 
     
     
@@ -106,16 +103,4 @@ public class Veterinario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-
-	public List<ClinicaVeterinario> getClinicas() {
-		return clinicas;
-	}
-
-	public void setClinicas(List<ClinicaVeterinario> clinicas) {
-		this.clinicas = clinicas;
-	}
-
-
-    
-    
 }

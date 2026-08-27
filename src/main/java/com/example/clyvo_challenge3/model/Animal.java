@@ -53,17 +53,16 @@ public class Animal {
 	private String numeroMicrochip;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_responsavel", nullable = true,unique = false)
-	@OnDelete(action = OnDeleteAction.SET_NULL)
+	@JoinColumn(name = "id_responsavel", nullable = false,unique = false)
 	private Responsavel responsavel;
 	
 	@OneToMany(mappedBy = "animal", fetch = FetchType.LAZY)
 	private List<Consulta> consultas  = new ArrayList<>();
 
-	@OneToMany(fetch = FetchType.LAZY,mappedBy = "animal",cascade = {CascadeType.REMOVE,CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(fetch = FetchType.LAZY,mappedBy = "animal",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<Vacinacao> vacinacoes = new ArrayList<>();
 	
-	@OneToOne(mappedBy = "animal",fetch = FetchType.LAZY,cascade = {CascadeType.REMOVE,CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToOne(mappedBy = "animal",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private EnderecoAnimal enderecoAnimal;
 
 	public Animal() {
