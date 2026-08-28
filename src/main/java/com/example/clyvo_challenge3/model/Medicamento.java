@@ -13,41 +13,94 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name= "T_CLYVO_MEDICAMENTO")
-public class Medicamento {
-	
+@Table(name = "T_CLYVO_MEDICAMENTO")
+public class Medicamento{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(name = "nm_medicamento",nullable = false)
+
+	@NotBlank(message = "O nome do medicamento é obrigatório")
+	@Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
+	@Column(name = "nm_medicamento", nullable = false)
 	private String nome;
-	
-	@Column(name = "qt_medicamento",nullable = false)
+
+	@NotNull(message = "A quantidade do medicamento é obrigatória")
+	@Min(value = 1, message = "A quantidade deve ser maior que zero")
+	@Column(name = "qt_medicamento", nullable = false)
 	private Integer quantidadeMedicamento;
-	@Column(name = "qt_dias",nullable = false)
+
+	@NotNull(message = "A quantidade de dias é obrigatória")
+	@Min(value = 1, message = "A quantidade de dias deve ser maior que zero")
+	@Column(name = "qt_dias", nullable = false)
 	private Integer quantidadeDias;
-	
-	@Column(name = "vl_dose",nullable = false, precision = 5, scale = 2)
+
+	@NotNull(message = "A dose é obrigatória")
+	@DecimalMin(value = "0.01", message = "A dose deve ser maior que zero")
+	@Digits(integer = 3, fraction = 2, message = "Dose inválida (máx. 3 dígitos inteiros e 2 decimais)")
+	@Column(name = "vl_dose", nullable = false, precision = 5, scale = 2)
 	private BigDecimal dose;
-	@Column(name = "un_dose",nullable = false)
+
+	@NotBlank(message = "A unidade da dose é obrigatória")
+	@Size(max = 20, message = "A unidade da dose deve ter no máximo 20 caracteres")
+	@Column(name = "un_dose", nullable = false)
 	private String unidadeDose;
-	
-	@Column(name = "qt_frequencia",nullable = false)
+
+	@NotNull(message = "A frequência é obrigatória")
+	@Min(value = 1, message = "A frequência deve ser maior que zero")
+	@Column(name = "qt_frequencia", nullable = false)
 	private Integer frequencia;
-	@Column(name = "un_frequencia",nullable = false)
+
+	@NotBlank(message = "A unidade de frequência é obrigatória")
+	@Size(max = 20, message = "A unidade de frequência deve ter no máximo 20 caracteres")
+	@Column(name = "un_frequencia", nullable = false)
 	private String unidadeFrequencia;
-	
+
+	@NotNull(message = "A forma farmacêutica é obrigatória")
 	@Enumerated(EnumType.STRING)
 	@Column(name = "forma_farmaceutica", nullable = false)
 	private FormaFarmaceuticaEnum formaFarmaceutica;
-	
+
+	@NotNull(message = "A prescrição é obrigatória")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_prescricao",nullable = false)
+	@JoinColumn(name = "id_prescricao", nullable = false)
 	private Prescricao prescricao;
+	
+	
+	
+	public Medicamento() {
+		super();
+	}
+
+	public Medicamento(Long id,
+			@NotBlank(message = "O nome do medicamento é obrigatório") @Size(max = 100, message = "O nome deve ter no máximo 100 caracteres") String nome,
+			@NotNull(message = "A quantidade do medicamento é obrigatória") @Min(value = 1, message = "A quantidade deve ser maior que zero") Integer quantidadeMedicamento,
+			@NotNull(message = "A quantidade de dias é obrigatória") @Min(value = 1, message = "A quantidade de dias deve ser maior que zero") Integer quantidadeDias,
+			@NotNull(message = "A dose é obrigatória") @DecimalMin(value = "0.01", message = "A dose deve ser maior que zero") @Digits(integer = 3, fraction = 2, message = "Dose inválida (máx. 3 dígitos inteiros e 2 decimais)") BigDecimal dose,
+			@NotBlank(message = "A unidade da dose é obrigatória") @Size(max = 20, message = "A unidade da dose deve ter no máximo 20 caracteres") String unidadeDose,
+			@NotNull(message = "A frequência é obrigatória") @Min(value = 1, message = "A frequência deve ser maior que zero") Integer frequencia,
+			@NotBlank(message = "A unidade de frequência é obrigatória") @Size(max = 20, message = "A unidade de frequência deve ter no máximo 20 caracteres") String unidadeFrequencia,
+			@NotNull(message = "A forma farmacêutica é obrigatória") FormaFarmaceuticaEnum formaFarmaceutica,
+			@NotNull(message = "A prescrição é obrigatória") Prescricao prescricao) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.quantidadeMedicamento = quantidadeMedicamento;
+		this.quantidadeDias = quantidadeDias;
+		this.dose = dose;
+		this.unidadeDose = unidadeDose;
+		this.frequencia = frequencia;
+		this.unidadeFrequencia = unidadeFrequencia;
+		this.formaFarmaceutica = formaFarmaceutica;
+		this.prescricao = prescricao;
+	}
 
 	public Long getId() {
 		return id;

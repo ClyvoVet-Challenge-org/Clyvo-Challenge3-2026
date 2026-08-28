@@ -15,6 +15,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "T_CLYVO_CONSULTA")
@@ -25,22 +28,28 @@ public class Consulta {
 	@Column(name = "id_consulta")
 	private Long id;
 
+	@NotBlank(message = "O histórico da consulta é obrigatório")
+	@Size(max = 200, message = "O histórico deve ter no máximo 200 caracteres")
 	@Column(name = "historico_consulta", nullable = false, length = 200)
 	private String historico;
 
+	@NotNull(message = "O status da consulta é obrigatório")
 	@Column(name = "st_consulta", nullable = false, length = 20)
 	@Enumerated(EnumType.STRING)
 	private StatusConsultaEnum statusConsulta;
 
+	@NotNull(message = "A data da consulta é obrigatória")
 	@Column(name = "dt_consulta", nullable = false)
 	private LocalDate dataConsulta;
 
 	// Relacionamento com Veterinário (Muitas consultas para Um Veterinário)
+	@NotNull(message = "O veterinário/clínica é obrigatório")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_vet_cli", nullable = false, unique = false)
 	private ClinicaVeterinario veterinarioClinica;
 
 	// Relacionamento com Animal (Muitas consultas para Um Animal)
+	@NotNull(message = "O animal é obrigatório")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_animal", nullable = false, unique = false)
 	private Animal animal;

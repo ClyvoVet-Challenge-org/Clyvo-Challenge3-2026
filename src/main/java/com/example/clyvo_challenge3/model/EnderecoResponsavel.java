@@ -24,6 +24,16 @@ public class EnderecoResponsavel extends EnderecoBase {
 		this.responsavel = responsavel;
 	}
 	
+	public void transferirEnderecoResponsavel(EnderecoResponsavel endereco_form) {
+		super.setPais(endereco_form.getPais());
+		super.setEstado(endereco_form.getEstado());
+		super.setCidade(endereco_form.getCidade());
+		super.setBairro(endereco_form.getBairro());
+		super.setLogradouro(endereco_form.getLogradouro());
+		super.setNumeroRua(endereco_form.getNumeroRua());
+		super.setCep(endereco_form.getCep());
+	}
+	
 	
 	
 	

@@ -13,6 +13,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "T_CLYVO_VACINACAO")
@@ -23,20 +26,25 @@ public class Vacinacao {
     @Column(name = "id_vacinacao")
     private Long id;
 
+    @NotBlank(message = "O nome da vacina é obrigatório")
+    @Size(max = 40, message = "O nome da vacina deve ter no máximo 40 caracteres")
     @Column(name = "nm_vacina", nullable = false, length = 40)
     private String nomeVacina;
 
+    @NotNull(message = "A data prevista é obrigatória")
     @Column(name = "dt_vacinacao_prevista",nullable=false)
     private LocalDate dataPrevista;
 
     @Column(name = "dt_vacinacao_efetuada", nullable = true)
     private LocalDate dataEfetuada;
 
+    @NotNull(message = "O status da vacinação é obrigatório")
     @Enumerated(EnumType.STRING)
     @Column(name = "st_vacinacao", length = 20,nullable=false)
     private StatusVacinacaoEnum statusVacinacao; 
 
     // Relacionamento com Animal (Muitas vacinações para Um Animal)
+    @NotNull(message = "O animal é obrigatório")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_animal", nullable = false,unique=false)
     private Animal animal;

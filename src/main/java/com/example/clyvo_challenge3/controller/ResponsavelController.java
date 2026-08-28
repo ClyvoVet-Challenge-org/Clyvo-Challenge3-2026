@@ -5,14 +5,18 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.clyvo_challenge3.model.Animal;
+import com.example.clyvo_challenge3.model.EnderecoResponsavel;
 import com.example.clyvo_challenge3.model.Responsavel;
 import com.example.clyvo_challenge3.repository.ResponsavelRepository;
+
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -53,6 +57,40 @@ public class ResponsavelController {
 		return new ModelAndView("redirect:/responsaveis");
 	}
 	
+	@GetMapping("/cadastro-responsavel")
+	public ModelAndView paginaCadastroResponsavel() {
+		ModelAndView mv = new ModelAndView("/responsavel/novoResponsavel");
+ 
+		Responsavel responsavel = new Responsavel();
+		responsavel.setEnderecoResponsavel(new EnderecoResponsavel());
+ 
+		mv.addObject("responsavel", responsavel);
+ 
+		return mv;
+	}
+	
+	@PostMapping("/cadastrar_responsavel") // action do formulario de responsavel
+	public ModelAndView cadastrarResponsavel(@Valid Responsavel responsavel_form, BindingResult bd) {
+		
+		
+		if(bd.hasErrors()) {
+			ModelAndView mv = new ModelAndView("redirect:/cadastro-responsavel");
+			mv.addObject("responsavel", responsavel_form);
+			mv.addObject("endereco", responsavel_form.getEnderecoResponsavel());
+			System.out.println("Deu Erro");
+			return mv;
+		}
+		responsavel_form.getEnderecoResponsavel().setResponsavel(responsavel_form);
+		Responsavel responsavel_banco = repResponsavel.save(responsavel_form);
+		System.out.println("Salvou no banco de dados");
+		
+		
+		ModelAndView mv = new ModelAndView("redirect:/responsaveis/"+responsavel_banco.getId());	
+		
+		return mv;
+		
+	}
+	
 	@GetMapping("/responsaveis/edicao/{id}")
 	public ModelAndView paginaEdicaoResponsavel(@PathVariable Long id) {
 		
@@ -71,7 +109,7 @@ public class ResponsavelController {
 	}
 	
 	@PostMapping("/responsaveis/atualizar/{id}")
-	public ModelAndView funcaoAtualizarResponsavel(@PathVariable Long id,Responsavel responsavel) {
+	public ModelAndView funcaoAtualizarResponsavel(@PathVariable Long id,@Valid Responsavel responsavel) {
 		Optional<Responsavel> op = repResponsavel.findById(id);
 		 
 		if (op.isPresent()) {
@@ -86,16 +124,16 @@ public class ResponsavelController {
 		return new ModelAndView("redirect:/responsaveis");
 		
 	}
-	
-	@GetMapping("/responsaveis/remover/{id}")
-	public ModelAndView funcaoRemoverResponsavel(@PathVariable Long id) {
-		Optional<Responsavel> op = repResponsavel.findById(id);
-		 
-		if (op.isPresent()) {
-			repResponsavel.deleteById(id);
-		}
-		
-		return new ModelAndView("redirect:/responsaveis");
-	}
+//																NÃO PERMITIDO
+//	@GetMapping("/responsaveis/remover/{id}")
+//	public ModelAndView funcaoRemoverResponsavel(@PathVariable Long id) {
+//		Optional<Responsavel> op = repResponsavel.findById(id);
+//		 
+//		if (op.isPresent()) {
+//			repResponsavel.deleteById(id);
+//		}
+//		
+//		return new ModelAndView("redirect:/responsaveis");
+//	}
 
 }

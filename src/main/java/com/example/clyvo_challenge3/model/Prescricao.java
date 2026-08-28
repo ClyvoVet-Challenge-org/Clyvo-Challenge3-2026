@@ -15,6 +15,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "T_CLYVO_PRESCRICAO")
@@ -25,17 +29,21 @@ public class Prescricao {
 	@Column(name = "id_prescricao")
 	private Long id;
 	
-	@Column(name = "dt_emissao",nullable = false)
+	@NotNull(message = "A data de emissão é obrigatória")
+	@PastOrPresent(message = "A data de emissão deve ser hoje")
+	@Column(name = "dt_emissao", nullable = false)
 	private LocalDate dataEmissao;
-	
 
-	@Column(name = "dt_expiracao",nullable = false)
+	@NotNull(message = "A data de expiração é obrigatória")
+	@Future(message = "A data de expiração deve ser uma data futura")
+	@Column(name = "dt_expiracao", nullable = false)
 	private LocalDate dataExpiracao;
-	
 
+	@Size(max = 255, message = "As observações devem ter no máximo 255 caracteres")
 	@Column(name = "observacoes_gerais",length = 255)
 	private String observacoesGerais;
 	
+	@NotNull(message = "A consulta é obrigatória")
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_consulta", nullable = false, unique = true )
 	private Consulta consulta;

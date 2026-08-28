@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Responsável</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 480px; margin: 40px auto; }
+        label { display: block; margin-top: 12px; font-weight: bold; }
+        input { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; }
+        .erro { color: #c0392b; font-size: 0.85em; margin-top: 2px; }
+        button { margin-top: 20px; padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h1>Cadastro de Responsável</h1>
+
+    <form th:action="@{/cadastrar_responsavel}" th:object="${responsavel}" method="post">
+
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" th:field="*{nome}" />
+        <div class="erro" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+
+        <label for="cpf">CPF</label>
+        <input type="text" id="cpf" th:field="*{cpf}" placeholder="000.000.000-00" />
+        <div class="erro" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
+
+        <label for="numeroTelefone">Telefone</label>
+        <input type="text" id="numeroTelefone" th:field="*{numeroTelefone}" placeholder="(00) 00000-0000" />
+        <div class="erro" th:if="${#fields.hasErrors('numeroTelefone')}" th:errors="*{numeroTelefone}"></div>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" th:field="*{email}" />
+        <div class="erro" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+        <h2>Endereço</h2>
+
+        <label for="pais">País</label>
+        <input type="text" id="pais" th:field="*{enderecoResponsavel.pais}" />
+        <div class="erro" th:if="${#fields.hasErrors('enderecoResponsavel.pais')}" th:errors="*{enderecoResponsavel.pais}"></div>
+
+        <label for="estado">Estado</label>
+        <input type="text" id="estado" th:field="*{enderecoResponsavel.estado}" />
+        <div class="erro" th:if="${#fields.hasErrors('enderecoResponsavel.estado')}" th:errors="*{enderecoResponsavel.estado}"></div>
+
+        <label for="cidade">Cidade</label>
+        <input type="text" id="cidade" th:field="*{enderecoResponsavel.cidade}" />
+        <div class="erro" th:if="${#fields.hasErrors('enderecoResponsavel.cidade')}" th:errors="*{enderecoResponsavel.cidade}"></div>
+
+        <label for="bairro">Bairro</label>
+        <input type="text" id="bairro" th:field="*{enderecoResponsavel.bairro}" />
+        <div class="erro" th:if="${#fields.hasErrors('enderecoResponsavel.bairro')}" th:errors="*{enderecoResponsavel.bairro}"></div>
+
+        <label for="logradouro">Logradouro</label>
+        <input type="text" id="logradouro" th:field="*{enderecoResponsavel.logradouro}" />
+        <div class="erro" th:if="${#fields.hasErrors('enderecoResponsavel.logradouro')}" th:errors="*{enderecoResponsavel.logradouro}"></div>
+
+        <label for="numeroRua">Número</label>
+        <input type="text" id="numeroRua" th:field="*{enderecoResponsavel.numeroRua}" />
+        <div class="erro" th:if="${#fields.hasErrors('enderecoResponsavel.numeroRua')}" th:errors="*{enderecoResponsavel.numeroRua}"></div>
+
+        <label for="complemento">Complemento (opcional)</label>
+        <input type="text" id="complemento" th:field="*{enderecoResponsavel.complemento}" />
+        <div class="erro" th:if="${#fields.hasErrors('enderecoResponsavel.complemento')}" th:errors="*{enderecoResponsavel.complemento}"></div>
+
+        <label for="cep">CEP</label>
+        <input type="text" id="cep" th:field="*{enderecoResponsavel.cep}" placeholder="00000-000" />
+        <div class="erro" th:if="${#fields.hasErrors('enderecoResponsavel.cep')}" th:errors="*{enderecoResponsavel.cep}"></div>
+
+        <button type="submit">Cadastrar</button>
+
+    </form>
+
+</body>
+</html>

@@ -8,25 +8,27 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "T_CLYVO_CLINICA_VET")
 public class ClinicaVeterinario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_clinica_vet")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_clinica_vet")
+	private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_veterinario", nullable = false)
-    private Veterinario veterinario;
+	@NotNull(message = "O veterinário é obrigatório")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_veterinario", nullable = false)
+	private Veterinario veterinario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_clinica", nullable = false)
-    private Clinica clinica;
+	@NotNull(message = "A clínica é obrigatória")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_clinica", nullable = false)
+	private Clinica clinica;
 
     public ClinicaVeterinario() {
         super();

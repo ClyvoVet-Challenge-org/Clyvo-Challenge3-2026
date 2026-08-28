@@ -1,13 +1,13 @@
 package com.example.clyvo_challenge3.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @MappedSuperclass
 public class EnderecoBase {
@@ -16,23 +16,44 @@ public class EnderecoBase {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length = 20,nullable = false)
+	@NotBlank(message = "O país é obrigatório")
+	@Size(max = 20, message = "O país deve ter no máximo 20 caracteres")
+	@Column(length = 20, nullable = false)
 	private String pais;
+
+	@NotBlank(message = "O estado é obrigatório")
+	@Size(max = 20, message = "O estado deve ter no máximo 20 caracteres")
 	@Column(length = 20, nullable = false)
 	private String estado;
-	@Column(length = 20,nullable = false)
+
+	@NotBlank(message = "A cidade é obrigatória")
+	@Size(max = 20, message = "A cidade deve ter no máximo 20 caracteres")
+	@Column(length = 20, nullable = false)
 	private String cidade;
-	@Column(length = 20,nullable = false)
+
+	@NotBlank(message = "O bairro é obrigatório")
+	@Size(max = 20, message = "O bairro deve ter no máximo 20 caracteres")
+	@Column(length = 20, nullable = false)
 	private String bairro;
-	@Column(length = 50,nullable = false)
+
+	@NotBlank(message = "O logradouro é obrigatório")
+	@Size(max = 50, message = "O logradouro deve ter no máximo 50 caracteres")
+	@Column(length = 50, nullable = false)
 	private String logradouro;
+
+	@NotBlank(message = "O número da rua é obrigatório")
+	@Size(max = 15, message = "O número da rua deve ter no máximo 15 caracteres")
 	@Column(name = "nr_rua", length = 15, nullable = false)
 	private String numeroRua;
-	@Column(length = 20 ,nullable = false)
+
+	@Size(max = 20, message = "O complemento deve ter no máximo 20 caracteres")
+	@Column(length = 20, nullable = true)
 	private String complemento;
-	@Column(length = 9,nullable = false)
+
+	@NotBlank(message = "O CEP é obrigatório")
+	@Pattern(regexp = "\\d{5}-\\d{3}", message = "CEP deve estar no formato 00000-000")
+	@Column(length = 9, nullable = false)
 	private String cep;
-	
 	
 
 	public Long getId() {

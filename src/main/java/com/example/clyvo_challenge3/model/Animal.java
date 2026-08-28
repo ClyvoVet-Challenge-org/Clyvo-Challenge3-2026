@@ -5,9 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,8 +16,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "T_CLYVO_ANIMAL")
@@ -31,27 +33,41 @@ public class Animal {
 	@Column(name = "id_animal")
 	private Long id;
 
+	@NotBlank(message = "O nome do animal é obrigatório")
+	@Size(max = 100, message = "O nome deve ter no máximo 100 caracteres")
 	@Column(name = "nm_animal", nullable = false, length = 100) // Obrigatório
 	private String nome;
 
+	@NotNull(message = "A data de nascimento é obrigatória")
+	@Past(message = "A data de nascimento deve ser uma data passada")
 	@Column(name = "dt_nascimento_animal", nullable = false) // Obrigatório
 	private LocalDate dataNascimento;
 
+	@NotNull(message = "O peso é obrigatório")
+	@DecimalMin(value = "0.01", message = "O peso deve ser maior que zero")
+	@Digits(integer = 3, fraction = 2, message = "Peso inválido (máx. 3 dígitos inteiros e 2 decimais)")
 	@Column(name = "peso_animal", nullable = false, precision = 5, scale = 2) // Obrigatório
 	private BigDecimal peso;
 
+	@NotBlank(message = "A espécie é obrigatória")
+	@Size(max = 50, message = "A espécie deve ter no máximo 50 caracteres")
 	@Column(name = "especie_animal", nullable = false, length = 50) // Obrigatório
 	private String especie;
 
+	@NotBlank(message = "A raça é obrigatória")
+	@Size(max = 50, message = "A raça deve ter no máximo 50 caracteres")
 	@Column(name = "raca_animal", nullable = false, length = 50) // Obrigatório
 	private String raca;
 
+	@Size(max = 20, message = "O RG deve ter no máximo 20 caracteres")
 	@Column(name = "rg_animal", length = 20, unique = true, nullable = true) // Opcional para adicionar depois
 	private String rg; 
 
+	@Size(max = 20, message = "O número do microchip deve ter no máximo 20 caracteres")
 	@Column(name = "nr_microchip_animal", length = 20, unique = true, nullable = true) // Opcional para adicionar depois
 	private String numeroMicrochip;
 
+	@NotNull(message = "O responsável é obrigatório")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_responsavel", nullable = false,unique = false)
 	private Responsavel responsavel;
