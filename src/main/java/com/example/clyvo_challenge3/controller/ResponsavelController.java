@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.clyvo_challenge3.model.Animal;
 import com.example.clyvo_challenge3.model.EnderecoResponsavel;
 import com.example.clyvo_challenge3.model.Responsavel;
+import com.example.clyvo_challenge3.repository.EnderecoResponsavelRepository;
 import com.example.clyvo_challenge3.repository.ResponsavelRepository;
 
 import jakarta.validation.Valid;
@@ -24,6 +25,8 @@ public class ResponsavelController {
 	
 	@Autowired
 	private ResponsavelRepository repResponsavel;
+	
+
 	
 	@GetMapping("/responsaveis")
 	public ModelAndView paginaListagemResponsaveis() {
@@ -74,14 +77,16 @@ public class ResponsavelController {
 		
 		
 		if(bd.hasErrors()) {
-			ModelAndView mv = new ModelAndView("redirect:/cadastro-responsavel");
+			ModelAndView mv = new ModelAndView("/responsavel/novoResponsavel");
 			mv.addObject("responsavel", responsavel_form);
-			mv.addObject("endereco", responsavel_form.getEnderecoResponsavel());
 			System.out.println("Deu Erro");
 			return mv;
 		}
 		responsavel_form.getEnderecoResponsavel().setResponsavel(responsavel_form);
+		
 		Responsavel responsavel_banco = repResponsavel.save(responsavel_form);
+		
+		
 		System.out.println("Salvou no banco de dados");
 		
 		
@@ -109,18 +114,29 @@ public class ResponsavelController {
 	}
 	
 	@PostMapping("/responsaveis/atualizar/{id}")
-	public ModelAndView funcaoAtualizarResponsavel(@PathVariable Long id,@Valid Responsavel responsavel) {
+	public ModelAndView funcaoAtualizarResponsavel(@PathVariable Long id,@Valid Responsavel responsavel, BindingResult bd) {
+		
+		
 		Optional<Responsavel> op = repResponsavel.findById(id);
-		 
 		if (op.isPresent()) {
 
+			
 			Responsavel responsavel_banco = op.get();
 
+			if(bd.hasErrors()) {
+				ModelAndView mv = new ModelAndView("/responsavel/edicao");
+				mv.addObject("responsavel", responsavel);
+				System.out.println("Deu Erro");
+				return mv;
+			}
+			
 			responsavel_banco.transferirResponsavel(responsavel);
 			repResponsavel.save(responsavel_banco);
 			
-			return new ModelAndView("redirect:/responsaveis/{id}");
+			return new ModelAndView("redirect:/responsaveis/"+responsavel_banco.getId());
 		}
+		
+		
 		return new ModelAndView("redirect:/responsaveis");
 		
 	}
