@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -118,4 +119,14 @@ public class Veterinario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
+	public void transferirVeterinario(Veterinario veterinario) {
+		this.nome = veterinario.getNome();
+        this.cpf = veterinario.getCpf();
+        this.crmv = veterinario.getCrmv();
+        this.email = veterinario.getEmail();
+        this.senha = veterinario.getSenha();
+		
+	}
+	
 }

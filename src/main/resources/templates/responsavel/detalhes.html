@@ -17,7 +17,7 @@
 	<div class="container">
 		<div class="row">
 			<h1>Responsável</h1>
-			
+
 		</div>
 		<div class="row">
 			<div class="col-12">
@@ -40,8 +40,14 @@
 					</tr>
 
 					<tr>
-						<td><b>Email</b></td>
+						<td><b>Email: </b></td>
 						<td th:text="${responsavel.email}"></td>
+					</tr>
+
+					<tr>
+						<td><b>Endereço: </b></td>
+						<td
+							th:text="${responsavel.enderecoResponsavel.logradouro} + ', ' + ${responsavel.enderecoResponsavel.numeroRua} + ' - ' + ${responsavel.enderecoResponsavel.bairro} + ', ' + ${responsavel.enderecoResponsavel.cidade} + '/' + ${responsavel.enderecoResponsavel.estado} + ' - CEP: ' + ${responsavel.enderecoResponsavel.cep}"></td>
 					</tr>
 
 				</table>
@@ -57,7 +63,6 @@
 							<th scope="col">Peso (kg)</th>
 							<th scope="col">RG</th>
 							<th scope="col">Microchip</th>
-							<th scope="col">Responsável</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -70,14 +75,12 @@
 							<td th:text="${animal.peso}">10.50</td>
 							<td th:text="${animal.rg ?: '-'}">-</td>
 							<td th:text="${animal.numeroMicrochip ?: '-'}">-</td>
-							<td th:text="${animal.responsavel?.nome}">Nome do
-								Responsável</td>
 						</tr>
 					</tbody>
 				</table>
-				
+
 				<div class="row">
-					<a href="/novo">Listagem de Responsáveis</a>
+					<a href="/novoAnimal">Adicionar Animal</a>
 				</div>
 
 			</div>
