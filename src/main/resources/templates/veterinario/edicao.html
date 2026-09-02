@@ -20,8 +20,8 @@
 		</div>
 		<div class="row">
 
-			<form th:object="${vet}"
-				th:action="@{/vets/atualizar/{idvet}(idvet = ${vet.id})}"
+			<form th:object="${veterinario}"
+				th:action="@{/vets/atualizar/{idvet}(idvet = ${veterinario.id})}"
 				method="post">
 
 				Nome: <input class="form-control" type="text" th:field="*{nome}"><br>

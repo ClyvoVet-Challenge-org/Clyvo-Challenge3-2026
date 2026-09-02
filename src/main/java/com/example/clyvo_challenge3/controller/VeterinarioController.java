@@ -66,7 +66,7 @@ public class VeterinarioController {
 		if (op.isPresent()) {
 		
 			ModelAndView mv = new ModelAndView("/veterinario/edicao");
-			mv.addObject("vet", op.get());
+			mv.addObject("veterinario", op.get());
 	
 			return mv;
 		}
@@ -86,7 +86,7 @@ public class VeterinarioController {
 
 			if(bd.hasErrors()) {
 				ModelAndView mv = new ModelAndView("/veterinario/edicao");
-				mv.addObject("vet", veterinario);
+				mv.addObject("veterinario", veterinario);
 
 				System.out.println("Deu Erro");
 	            System.out.println("Quantidade: " + bd.getErrorCount());
