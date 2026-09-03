@@ -63,6 +63,7 @@
 							<th scope="col">Peso (kg)</th>
 							<th scope="col">RG</th>
 							<th scope="col">Microchip</th>
+							<th scope="col">#</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -75,6 +76,7 @@
 							<td th:text="${animal.peso}">10.50</td>
 							<td th:text="${animal.rg ?: '-'}">-</td>
 							<td th:text="${animal.numeroMicrochip ?: '-'}">-</td>
+							<td><a th:href="@{/animais/{idAnimal}(idAnimal = ${animal.id})}">Detalhes</a></td>
 						</tr>
 					</tbody>
 				</table>
