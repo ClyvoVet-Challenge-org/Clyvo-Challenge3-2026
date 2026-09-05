@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,6 +43,7 @@ public class Animal {
 
 	@NotNull(message = "A data de nascimento é obrigatória")
 	@Past(message = "A data de nascimento deve ser uma data passada")
+	@DateTimeFormat(iso = ISO.DATE)
 	@Column(name = "dt_nascimento_animal", nullable = false) // Obrigatório
 	private LocalDate dataNascimento;
 
@@ -165,5 +169,27 @@ public class Animal {
 	public void setVacinacoes(List<Vacinacao> vacinacoes) {
 		this.vacinacoes = vacinacoes;
 	}
+
+
+	public List<Consulta> getConsultas() {
+		return consultas;
+	}
+
+
+	public void setConsultas(List<Consulta> consultas) {
+		this.consultas = consultas;
+	}
+
+
+	public EnderecoAnimal getEnderecoAnimal() {
+		return enderecoAnimal;
+	}
+
+
+	public void setEnderecoAnimal(EnderecoAnimal enderecoAnimal) {
+		this.enderecoAnimal = enderecoAnimal;
+	}
+	
+	
 
 }
