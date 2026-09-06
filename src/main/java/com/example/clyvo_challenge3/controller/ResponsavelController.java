@@ -30,7 +30,7 @@ public class ResponsavelController {
 	
 	@GetMapping("/responsaveis")
 	public ModelAndView paginaListagemResponsaveis() {
-		ModelAndView mv = new ModelAndView("/responsavel/all");
+		ModelAndView mv = new ModelAndView("responsavel/all");
 		 
 		List<Responsavel> responsaveis = repResponsavel.findAll();
 		mv.addObject("responsaveis",responsaveis);
@@ -41,7 +41,7 @@ public class ResponsavelController {
 	
 	@GetMapping("/responsaveis/{id}")
 	public ModelAndView paginaDetalhes(@PathVariable Long id){
-		ModelAndView mv = new ModelAndView("/responsavel/detalhes");
+		ModelAndView mv = new ModelAndView("responsavel/detalhes");
 		
 		Optional<Responsavel> op = repResponsavel.findById(id);
 		
@@ -62,7 +62,7 @@ public class ResponsavelController {
 	
 	@GetMapping("/cadastro-responsavel")
 	public ModelAndView paginaCadastroResponsavel() {
-		ModelAndView mv = new ModelAndView("/responsavel/novoResponsavel");
+		ModelAndView mv = new ModelAndView("responsavel/novoResponsavel");
  
 		Responsavel responsavel = new Responsavel();
 		responsavel.setEnderecoResponsavel(new EnderecoResponsavel());
@@ -77,7 +77,7 @@ public class ResponsavelController {
 		
 		
 		if(bd.hasErrors()) {
-			ModelAndView mv = new ModelAndView("/responsavel/novoResponsavel");
+			ModelAndView mv = new ModelAndView("responsavel/novoResponsavel");
 			mv.addObject("responsavel", responsavel_form);
 			System.out.println("Deu Erro");
 			return mv;
@@ -104,7 +104,7 @@ public class ResponsavelController {
 		
 		if (op.isPresent()) {
 		
-			ModelAndView mv = new ModelAndView("/responsavel/edicao");
+			ModelAndView mv = new ModelAndView("responsavel/edicao");
 			mv.addObject("responsavel", op.get());
 	
 			return mv;
@@ -124,7 +124,7 @@ public class ResponsavelController {
 			Responsavel responsavel_banco = op.get();
 
 			if(bd.hasErrors()) {
-				ModelAndView mv = new ModelAndView("/responsavel/edicao");
+				ModelAndView mv = new ModelAndView("responsavel/edicao");
 				mv.addObject("responsavel", responsavel);
 				System.out.println("Deu Erro");
 				return mv;

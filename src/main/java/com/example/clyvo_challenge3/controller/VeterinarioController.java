@@ -24,7 +24,7 @@ public class VeterinarioController {
 	
 	@GetMapping("/vets")
 	public ModelAndView paginaTodosVeterinario() {
-		ModelAndView mv = new ModelAndView("/veterinario/all");
+		ModelAndView mv = new ModelAndView("veterinario/all");
 		
 		List<Veterinario> vets = repVet.findAll();
 		
@@ -35,7 +35,7 @@ public class VeterinarioController {
 	
 	@GetMapping("/vets/{id}")
 	public ModelAndView paginaDetalhes(@PathVariable Long id){
-		ModelAndView mv = new ModelAndView("/veterinario/detalhes");
+		ModelAndView mv = new ModelAndView("veterinario/detalhes");
 		
 		Optional<Veterinario> op = repVet.findById(id);
 		
@@ -65,7 +65,7 @@ public class VeterinarioController {
 		
 		if (op.isPresent()) {
 		
-			ModelAndView mv = new ModelAndView("/veterinario/edicao");
+			ModelAndView mv = new ModelAndView("veterinario/edicao");
 			mv.addObject("veterinario", op.get());
 	
 			return mv;
@@ -85,7 +85,7 @@ public class VeterinarioController {
 			Veterinario veterinario_banco = op.get();
 
 			if(bd.hasErrors()) {
-				ModelAndView mv = new ModelAndView("/veterinario/edicao");
+				ModelAndView mv = new ModelAndView("veterinario/edicao");
 				mv.addObject("veterinario", veterinario);
 
 				System.out.println("Deu Erro");

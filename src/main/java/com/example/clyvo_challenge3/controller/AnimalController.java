@@ -32,7 +32,7 @@ public class AnimalController {
 
 	@GetMapping("/animais")
 	public ModelAndView paginaListagemAnimais() {
-		ModelAndView mv = new ModelAndView("/animal/all");
+		ModelAndView mv = new ModelAndView("animal/all");
 
 		List<Animal> animais = repAnimal.findAll();
 		mv.addObject("animais", animais);
@@ -42,7 +42,7 @@ public class AnimalController {
 
 	@GetMapping("/animais/{id}")
 	public ModelAndView paginaDetalhes(@PathVariable Long id) {
-		ModelAndView mv = new ModelAndView("/animal/detalhes");
+		ModelAndView mv = new ModelAndView("animal/detalhes");
 
 		Optional<Animal> op = repAnimal.findById(id);
 
@@ -57,18 +57,20 @@ public class AnimalController {
 		return new ModelAndView("redirect:/animais");
 	}
 
-	@GetMapping("/cadastro-animal")
-	public ModelAndView paginaCadastroAnimal() {
-		ModelAndView mv = new ModelAndView("/animal/novoAnimal");
-
-		Animal animal = new Animal();
-		mv.addObject("animal", animal);
-
-		List<Responsavel> responsaveis = repResponsavel.findAll();
-		mv.addObject("responsaveis", responsaveis);
-
-		return mv;
-	}
+	
+//									Inutilizado, pois a criação de um animal deve partir do responsável
+//	@GetMapping("/cadastro-animal")
+//	public ModelAndView paginaCadastroAnimal() {
+//		ModelAndView mv = new ModelAndView("animal/novoAnimal");
+//
+//		Animal animal = new Animal();
+//		mv.addObject("animal", animal);
+//
+//		List<Responsavel> responsaveis = repResponsavel.findAll();
+//		mv.addObject("responsaveis", responsaveis);
+//
+//		return mv;
+//	}
 
 	// =============== CREATE ==================
 
@@ -95,7 +97,7 @@ public class AnimalController {
 
 		Responsavel responsavel = opResponsavel.get();
 
-		ModelAndView mv = new ModelAndView("/animal/novoAnimal");
+		ModelAndView mv = new ModelAndView("animal/novoAnimal");
 
 		mv.addObject("responsavel", responsavel);
 
@@ -121,7 +123,7 @@ public class AnimalController {
 		Responsavel responsavel = opResponsavel.get();
 
 		if (bd.hasErrors()) {
-			ModelAndView mv = new ModelAndView("/animal/novoAnimal");
+			ModelAndView mv = new ModelAndView("animal/novoAnimal");
 			mv.addObject("animal", animal_form);
 			mv.addObject("responsavel", responsavel);
 			System.out.println("Deu Erro");
@@ -175,7 +177,7 @@ public class AnimalController {
 	    enderecoForm.setCep(animal.getEnderecoAnimal().getCep());
 	    animalForm.setEnderecoAnimal(enderecoForm);
 
-	    ModelAndView mv = new ModelAndView("/animal/edicao");
+	    ModelAndView mv = new ModelAndView("animal/edicao");
 	    mv.addObject("animal", animal);
 	    mv.addObject("animalForm", animalForm);
 	    System.out.println("PÁGINA DE EDIÇÃO DE ANIMAL CARREGADA");
@@ -206,7 +208,7 @@ public class AnimalController {
 //		}
 
 		if (bd.hasErrors()) {
-		    ModelAndView mv = new ModelAndView("/animal/edicao");
+		    ModelAndView mv = new ModelAndView("animal/edicao");
 		    mv.addObject("animal", animal_banco); // tem responsavel, usado só para exibir o nome dele
 		    mv.addObject("animalForm", animal_form); // dados digitados, para reexibir nos campos com erro
 		    return mv;
