@@ -16,6 +16,8 @@
     <h1>Cadastro de Responsável</h1>
 
     <form th:action="@{/cadastrar_responsavel}" th:object="${responsavel}" method="post">
+    
+    	<input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
         <label for="nome">Nome</label>
         <input type="text" id="nome" th:field="*{nome}" />

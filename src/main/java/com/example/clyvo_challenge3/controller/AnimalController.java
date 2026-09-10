@@ -30,15 +30,15 @@ public class AnimalController {
 	@Autowired
 	private ResponsavelRepository repResponsavel;
 
-	@GetMapping("/animais")
-	public ModelAndView paginaListagemAnimais() {
-		ModelAndView mv = new ModelAndView("animal/all");
-
-		List<Animal> animais = repAnimal.findAll();
-		mv.addObject("animais", animais);
-
-		return mv;
-	}
+//	@GetMapping("/animais")
+//	public ModelAndView paginaListagemAnimais() {
+//		ModelAndView mv = new ModelAndView("animal/all");
+//
+//		List<Animal> animais = repAnimal.findAll();
+//		mv.addObject("animais", animais);
+//
+//		return mv;
+//	}
 
 	@GetMapping("/animais/{id}")
 	public ModelAndView paginaDetalhes(@PathVariable Long id) {

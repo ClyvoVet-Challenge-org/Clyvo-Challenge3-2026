@@ -28,90 +28,90 @@ public class ResponsavelController {
 	
 
 	
-	@GetMapping("/responsaveis")
-	public ModelAndView paginaListagemResponsaveis() {
-		ModelAndView mv = new ModelAndView("responsavel/all");
-		 
-		List<Responsavel> responsaveis = repResponsavel.findAll();
-		mv.addObject("responsaveis",responsaveis);
-		
-		
-		return mv;
-	}
-	
-	@GetMapping("/responsaveis/{id}")
-	public ModelAndView paginaDetalhes(@PathVariable Long id){
-		ModelAndView mv = new ModelAndView("responsavel/detalhes");
-		
-		Optional<Responsavel> op = repResponsavel.findById(id);
-		
+//	@GetMapping("/responsaveis")
+//	public ModelAndView paginaListagemResponsaveis() {
+//		ModelAndView mv = new ModelAndView("responsavel/all");
+//		 
+//		List<Responsavel> responsaveis = repResponsavel.findAll();
+//		mv.addObject("responsaveis",responsaveis);
+//		
+//		
+//		return mv;
+//	}
 
-		if (op.isPresent()) {
-			Responsavel responsavel = op.get();
-			mv.addObject("responsavel",responsavel);
-			List<Animal> animais = responsavel.getAnimais();
-			mv.addObject("animais",animais);			
-			return mv;
-			
-		}
-		
-		
-		// Usuario Inexistente
-		return new ModelAndView("redirect:/responsaveis");
-	}
+//	@GetMapping("/responsaveis/{id}")
+//	public ModelAndView paginaDetalhes(@PathVariable Long id){
+//		ModelAndView mv = new ModelAndView("responsavel/detalhes");
+//		
+//		Optional<Responsavel> op = repResponsavel.findById(id);
+//		
+//
+//		if (op.isPresent()) {
+//			Responsavel responsavel = op.get();
+//			mv.addObject("responsavel",responsavel);
+//			List<Animal> animais = responsavel.getAnimais();
+//			mv.addObject("animais",animais);			
+//			return mv;
+//			
+//		}
+//		
+//		
+//		// Usuario Inexistente
+//		return new ModelAndView("redirect:/responsaveis");
+//	}
 	
-	@GetMapping("/cadastro-responsavel")
-	public ModelAndView paginaCadastroResponsavel() {
-		ModelAndView mv = new ModelAndView("responsavel/novoResponsavel");
- 
-		Responsavel responsavel = new Responsavel();
-		responsavel.setEnderecoResponsavel(new EnderecoResponsavel());
- 
-		mv.addObject("responsavel", responsavel);
- 
-		return mv;
-	}
+//	@GetMapping("/cadastro-responsavel")
+//	public ModelAndView paginaCadastroResponsavel() {
+//		ModelAndView mv = new ModelAndView("responsavel/novoResponsavel");
+// 
+//		Responsavel responsavel = new Responsavel();
+//		responsavel.setEnderecoResponsavel(new EnderecoResponsavel());
+// 
+//		mv.addObject("responsavel", responsavel);
+// 
+//		return mv;
+//	}
 	
-	@PostMapping("/cadastrar_responsavel") // action do formulario de responsavel
-	public ModelAndView cadastrarResponsavel(@Valid Responsavel responsavel_form, BindingResult bd) {
-		
-		
-		if(bd.hasErrors()) {
-			ModelAndView mv = new ModelAndView("responsavel/novoResponsavel");
-			mv.addObject("responsavel", responsavel_form);
-			System.out.println("Deu Erro");
-			return mv;
-		}
-		responsavel_form.getEnderecoResponsavel().setResponsavel(responsavel_form);
-		
-		Responsavel responsavel_banco = repResponsavel.save(responsavel_form);
-		
-		
-		System.out.println("Salvou no banco de dados");
-		
-		
-		ModelAndView mv = new ModelAndView("redirect:/responsaveis/"+responsavel_banco.getId());	
-		
-		return mv;
-		
-	}
+//	@PostMapping("/cadastrar_responsavel") // action do formulario de responsavel
+//	public ModelAndView cadastrarResponsavel(@Valid Responsavel responsavel_form, BindingResult bd) {
+//		
+//		
+//		if(bd.hasErrors()) {
+//			ModelAndView mv = new ModelAndView("responsavel/novoResponsavel");
+//			mv.addObject("responsavel", responsavel_form);
+//			System.out.println("Deu Erro");
+//			return mv;
+//		}
+//		responsavel_form.getEnderecoResponsavel().setResponsavel(responsavel_form);
+//		
+//		Responsavel responsavel_banco = repResponsavel.save(responsavel_form);
+//		
+//		
+//		System.out.println("Salvou no banco de dados");
+//		
+//		
+//		ModelAndView mv = new ModelAndView("redirect:/responsaveis/"+responsavel_banco.getId());	
+//		
+//		return mv;
+//		
+//	}
 	
-	@GetMapping("/responsaveis/edicao/{id}")
-	public ModelAndView paginaEdicaoResponsavel(@PathVariable Long id) {
-		
-		
-		Optional<Responsavel> op = repResponsavel.findById(id);
-		
-		if (op.isPresent()) {
-		
-			ModelAndView mv = new ModelAndView("responsavel/edicao");
-			mv.addObject("responsavel", op.get());
-	
-			return mv;
-		}
-		
-		return new ModelAndView("redirect:/responsaveis");
-	}
+//	@GetMapping("/responsaveis/edicao/{id}")
+//	public ModelAndView paginaEdicaoResponsavel(@PathVariable Long id) {
+//		
+//		
+//		Optional<Responsavel> op = repResponsavel.findById(id);
+//		
+//		if (op.isPresent()) {
+//		
+//			ModelAndView mv = new ModelAndView("responsavel/edicao");
+//			mv.addObject("responsavel", op.get());
+//	
+//			return mv;
+//		}
+//		
+//		return new ModelAndView("redirect:/responsaveis");
+//	}
 	
 	@PostMapping("/responsaveis/atualizar/{id}")
 	public ModelAndView funcaoAtualizarResponsavel(@PathVariable Long id,@Valid Responsavel responsavel, BindingResult bd) {

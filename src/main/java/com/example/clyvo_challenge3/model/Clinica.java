@@ -1,9 +1,13 @@
 package com.example.clyvo_challenge3.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.validator.constraints.br.CNPJ;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +26,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "T_CLYVO_CLINICA")
-public class Clinica {
+public class Clinica implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -138,5 +142,25 @@ public class Clinica {
     public void setEnderecos(List<EnderecoClinica> enderecos) {
         this.enderecos = enderecos;
     }
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public @Nullable String getPassword() {
+		// TODO Auto-generated method stub
+		return this.senha;
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		return this.email;
+	}
+
+
     
 }

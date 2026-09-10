@@ -2,8 +2,11 @@ package com.example.clyvo_challenge3.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,106 +14,314 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.clyvo_challenge3.model.Clinica;
+import com.example.clyvo_challenge3.model.ClinicaVeterinario;
+import com.example.clyvo_challenge3.model.Consulta;
+import com.example.clyvo_challenge3.model.TipoUsuarioEnum;
+import com.example.clyvo_challenge3.model.Usuario;
 import com.example.clyvo_challenge3.model.Veterinario;
+import com.example.clyvo_challenge3.repository.ClinicaVeterinarioRepository;
+import com.example.clyvo_challenge3.repository.ConsultaRepository;
+import com.example.clyvo_challenge3.repository.UsuarioRepository;
 import com.example.clyvo_challenge3.repository.VeterinarioRepository;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class VeterinarioController {
-	
+
 	@Autowired
 	private VeterinarioRepository repVet;
+
+	@Autowired
+	private UsuarioRepository repUsuario;
 	
-	@GetMapping("/vets")
-	public ModelAndView paginaTodosVeterinario() {
-		ModelAndView mv = new ModelAndView("veterinario/all");
-		
-		List<Veterinario> vets = repVet.findAll();
-		
-		mv.addObject("vets", vets);
-		
-		return mv;		
+	@Autowired
+	private ClinicaVeterinarioRepository repCliVet;
+	
+	@Autowired
+    private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private ConsultaRepository repConsulta;
+
+//	// Não Uitilizado
+//	@GetMapping("/vets")
+//	public ModelAndView paginaTodosVeterinario() {
+//		ModelAndView mv = new ModelAndView("veterinario/all");
+//
+//		List<Veterinario> vets = repVet.findAll();
+//
+//		mv.addObject("vets", vets);
+//
+//		return mv;
+//	}
+
+	// APENAS : CLINICA LOGADA
+	@GetMapping("/clinica/veterinarios")
+	public ModelAndView paginaListagemVeterinariosDaClinica(Authentication authentication) {
+
+		// 1) Descobre qual Usuario esta logado (username = email da clinica)
+		String username = authentication.getName();
+
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+		if (opUsuario.isEmpty()) {
+			return new ModelAndView("redirect:/login");
+		}
+
+		// 2) Pega a Clinica vinculada a esse Usuario
+		Usuario usuario = opUsuario.get();
+		Clinica clinica = usuario.getClinica();
+
+		// 3) Extrai a lista de Veterinario a partir dos vinculos ClinicaVeterinario
+		List<Veterinario> veterinarios = clinica.getVeterinarios().stream().map(ClinicaVeterinario::getVeterinario)
+				.collect(Collectors.toList());
+
+		ModelAndView mv = new ModelAndView("/clinica/veterinarios");
+		mv.addObject("clinica", clinica);
+		mv.addObject("veterinarios", veterinarios);
+
+		return mv;
 	}
-	
-	@GetMapping("/vets/{id}")
-	public ModelAndView paginaDetalhes(@PathVariable Long id){
+
+//	@GetMapping("/vets/{id}")
+//	public ModelAndView paginaDetalhes(@PathVariable Long id) {
+//		ModelAndView mv = new ModelAndView("veterinario/detalhes");
+//
+//		Optional<Veterinario> op = repVet.findById(id);
+//
+//		if (op.isPresent()) {
+//			Veterinario veterinario = op.get();
+//			mv.addObject("vet", veterinario);
+//			return mv;
+//
+//		}
+//
+//		// Usuario Inexistente
+//		return new ModelAndView("redirect:/vets");
+//	}
+
+	// APENAS : CLINICA LOGADA
+	@GetMapping("/clinica/veterinarios/{idVeterinario}")
+	public ModelAndView paginaDetalhesVeterinarioDaClinica(Authentication authentication, @PathVariable Long idVeterinario) {
 		ModelAndView mv = new ModelAndView("veterinario/detalhes");
-		
-		Optional<Veterinario> op = repVet.findById(id);
-		
 
-		if (op.isPresent()) {
-			Veterinario veterinario = op.get();
-			mv.addObject("vet",veterinario);		
+		// 1) Descobre qual Usuario esta logado (username = email da clinica)
+		String username = authentication.getName();
+
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+		if (opUsuario.isEmpty()) {
+			return new ModelAndView("redirect:/login");
+		}
+
+		// 2) Pega a Clinica vinculada a esse Usuario
+		Usuario usuario = opUsuario.get();
+		Clinica clinica = usuario.getClinica();
+		
+		
+		// 3) Confere se o veterinario da URL é contratado pela clinica logada
+		Optional<ClinicaVeterinario> opCliVet = repCliVet.findByClinicaAndVeterinario(clinica.getId(),idVeterinario);
+		
+		if (opCliVet.isEmpty()) {return new ModelAndView("redirect:/clinica/veterinarios");}
+		
+		Veterinario veterinarioAssociado = opCliVet.get().getVeterinario();
+
+		mv.addObject("vet", veterinarioAssociado);
+		return mv;
+
+	}
+	
+	// APENAS : VETERINARIO LOGADO
+	@GetMapping("/vet/edicao")
+	public ModelAndView paginaEdicaoVet(Authentication authentication) {
+
+		String username = authentication.getName();
+
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+
+		if (opUsuario.isEmpty()) {
+			return new ModelAndView("redirect:/login");
+		}
+		Veterinario veterinarioLogado = opUsuario.get().getVeterinario();
+
+		ModelAndView mv = new ModelAndView("veterinario/edicao");
+		mv.addObject("veterinario", veterinarioLogado);
+
+		return mv;
+
+	}
+	
+	// APENAS : VETERINARIO LOGADO
+	@PostMapping("/vet/atualizar")
+	public ModelAndView funcaoAtualizarVeterinario(Authentication authentication, @Valid Veterinario veterinario,
+			BindingResult bd) {
+
+		String username = authentication.getName();
+
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+
+		if (opUsuario.isEmpty()) {
+			return new ModelAndView("redirect:/login");
+		}
+
+		Usuario usuario = opUsuario.get();
+
+		Veterinario veterinarioLogado = usuario.getVeterinario();
+
+		if (bd.hasErrors()) {
+			ModelAndView mv = new ModelAndView("/veterinario/edicao");
+
+			mv.addObject("veterinario", veterinario);
+
 			return mv;
-			
 		}
-		
-		
-		// Usuario Inexistente
-		return new ModelAndView("redirect:/vets");
+
+		veterinarioLogado.transferirVeterinario(veterinario);
+
+		repVet.save(veterinarioLogado);
+
+		return new ModelAndView("redirect:/vet/perfil");
+
+	};
+	
+	//APENAS : VETERINARIO LOGADO
+	@GetMapping("/vet/perfil")
+	public ModelAndView paginaPerfilVeterinario(Authentication authentication) {
+
+	    String username = authentication.getName();
+
+	    Optional<Usuario> opUsuario =
+	            repUsuario.findByUsername(username);
+
+	    if (opUsuario.isEmpty()) {
+	        return new ModelAndView("redirect:/login");
+	    }
+
+	    Veterinario veterinarioLogado =
+	            opUsuario.get().getVeterinario();
+
+	    ModelAndView mv =
+	            new ModelAndView("/veterinario/perfil");
+
+	    mv.addObject("veterinario", veterinarioLogado);
+
+	    return mv;
 	}
 	
-	
-	
-	// ERRO : Mesmo dando erro de validação, a aplicação continua no endpoint /vets/atualizar/{id}
-	// Ela deveria voltar para o template /veterinario/edicao
+	// APENAS : CLINICA LOGADA
+	@GetMapping("/clinica/veterinarios/novo")
+	public ModelAndView paginaCadastroVeterinario(Authentication authentication) {
 
-	@GetMapping("/vets/edicao/{id}")
-	public ModelAndView paginaEdicaoVet(@PathVariable Long id) {
-		
-		
-		Optional<Veterinario> op = repVet.findById(id);
-		
-		if (op.isPresent()) {
-		
-			ModelAndView mv = new ModelAndView("veterinario/edicao");
-			mv.addObject("veterinario", op.get());
+		String username = authentication.getName();
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+
+		if (opUsuario.isEmpty()) {
+			return new ModelAndView("redirect:/login");
+		}
+
+		Clinica clinica = opUsuario.get().getClinica();
+
+		ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
+		mv.addObject("clinica", clinica);
+		mv.addObject("veterinario", new Veterinario());
+
+		return mv;
+	}
 	
+	// APENAS : CLINICA LOGADO
+	@PostMapping("/clinica/veterinarios/salvar")
+	public ModelAndView funcaoAssociarVeterinarioEClinica(Authentication authentication, @Valid Veterinario veterinario,BindingResult bd) {
+		
+		
+		String username = authentication.getName();
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+
+		if (opUsuario.isEmpty()) {
+			return new ModelAndView("redirect:/login");
+		}
+		
+		Clinica clinica = opUsuario.get().getClinica();
+		
+		if (bd.hasErrors()) {
+			ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
+			mv.addObject("veterinario", veterinario);
+			mv.addObject("clinica",clinica);
 			return mv;
 		}
 		
-		return new ModelAndView("redirect:/vets");
+		Veterinario veterinarioSalvo= repVet.save(veterinario);
+		
+		ClinicaVeterinario clivet = new ClinicaVeterinario();
+		clivet.setClinica(clinica);
+		clivet.setVeterinario(veterinarioSalvo);
+		
+		repCliVet.save(clivet);
+		
+		return new ModelAndView("redirect:/clinica/veterinarios");
 	}
 	
+	// TODOS PODEM ACESSAR
+	@GetMapping("/cadastro-veterinario")
+	public ModelAndView paginaCadastroVeterinario() {
+	    ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
+	    mv.addObject("veterinario", new Veterinario());
+	    return mv;
+	}
 	
-	@PostMapping("/vets/atualizar/{id}")
-	public ModelAndView funcaoAtualizarVeterinario(@PathVariable Long id,@Valid Veterinario veterinario, BindingResult bd) {
+	// TODOS PODEM ACESSAR
+	@PostMapping("/cadastrar_veterinario")
+	public ModelAndView cadastrarVeterinario(
+	        @Valid Veterinario veterinario_form,
+	        BindingResult bd) {
+
+	    if (bd.hasErrors()) {
+	        ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
+	        mv.addObject("veterinario", veterinario_form);
+	        return mv;
+	    }
+
+	    String senhaDigitada = veterinario_form.getSenha();
+
+	    // Cria o veterinário
+	    veterinario_form.setSenha(
+	        passwordEncoder.encode(senhaDigitada)
+	    );
+
+	    Veterinario veterinarioBanco =
+	            repVet.save(veterinario_form);
+
+	    // Cria o usuário responsável pelo login
+	    Usuario usuario = new Usuario();
+
+	    usuario.setUsername(veterinarioBanco.getEmail());
+	    usuario.setSenha(
+	        passwordEncoder.encode(senhaDigitada)
+	    );
+	    usuario.setTipo(TipoUsuarioEnum.VETERINARIO);
+	    usuario.setVeterinario(veterinarioBanco);
+
+	    repUsuario.save(usuario);
+
+	    return new ModelAndView("redirect:/login");
+	}
+	
+	// APENAS: VETERINARIO
+	@GetMapping("/vet/minhas-consultas")
+	public ModelAndView paginaConsultasDoVeterinario(Authentication authentication) {
+		ModelAndView mv = new ModelAndView("/veterinario/consultas");
+		String username = authentication.getName();
+		
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+		if (opUsuario.isEmpty()) {return new ModelAndView("redirect:/login");}
+		
+		Veterinario veterinarioLogado = opUsuario.get().getVeterinario();
+		
+		List<Consulta> listaConsultas= repConsulta.findByVeterinario(veterinarioLogado.getId());
 		
 		
-		Optional<Veterinario> op = repVet.findById(id);
-		if (op.isPresent()) {
-			
-			Veterinario veterinario_banco = op.get();
+		mv.addObject("consultas",listaConsultas);
 
-			if(bd.hasErrors()) {
-				ModelAndView mv = new ModelAndView("veterinario/edicao");
-				mv.addObject("veterinario", veterinario);
-
-				System.out.println("Deu Erro");
-	            System.out.println("Quantidade: " + bd.getErrorCount());
-
-	            bd.getFieldErrors().forEach(error -> {
-	                System.out.println(
-	                    error.getField() + " -> " + error.getDefaultMessage()
-	                );
-	            });
-
-				
-				return mv;
-			}
-			
-			veterinario_banco.transferirVeterinario(veterinario);
-			repVet.save(veterinario_banco);
-			
-			return new ModelAndView("redirect:/vets/"+veterinario_banco.getId());
+		return mv;
 		}
-		
-		
-		return new ModelAndView("redirect:/vets");
-		
-	}
 
-	
 }

@@ -119,6 +119,16 @@ public class Veterinario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+    
+    
+
+	public List<ClinicaVeterinario> getClinicas() {
+		return clinicas;
+	}
+
+	public void setClinicas(List<ClinicaVeterinario> clinicas) {
+		this.clinicas = clinicas;
+	}
 
 	public void transferirVeterinario(Veterinario veterinario) {
 		this.nome = veterinario.getNome();

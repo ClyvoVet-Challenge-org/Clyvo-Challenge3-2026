@@ -21,8 +21,10 @@
 		<div class="row">
 
 			<form th:object="${veterinario}"
-				th:action="@{/vets/atualizar/{idvet}(idvet = ${veterinario.id})}"
+				th:action="@{/vet/atualizar}"
 				method="post">
+				
+				<input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
 				Nome: <input class="form-control" type="text" th:field="*{nome}"><br>
 				<div style="color: red;" th:if="${#fields.hasErrors('nome')}"

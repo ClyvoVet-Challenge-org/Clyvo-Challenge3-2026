@@ -1,39 +1,86 @@
 package com.example.clyvo_challenge3.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.clyvo_challenge3.model.Clinica;
+import com.example.clyvo_challenge3.model.TipoUsuarioEnum;
+import com.example.clyvo_challenge3.model.Usuario;
 import com.example.clyvo_challenge3.repository.ClinicaRepository;
+import com.example.clyvo_challenge3.repository.UsuarioRepository;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class ClinicaController {
-	
-	@Autowired
-	private ClinicaRepository repClinica;
-	
-//	@Autowired
-//	private PasswordEncoder passwordEncoder; // já é um Bean, graças ao SegurancaConfig
 
-	@PostMapping("/cadastrar_clinica")
-	public ModelAndView cadastrarClinica(@Valid Clinica clinica_form, BindingResult bd) {
+    @Autowired
+    private ClinicaRepository repClinica;
 
-	    if (bd.hasErrors()) {
-	        // ... reexibe formulário
-	    }
+    @Autowired
+    private UsuarioRepository repUsuario;
 
-//	    // ESSENCIAL: nunca salvar senha em texto puro
-//	    String senhaHash = passwordEncoder.encode(clinica_form.getSenha());
-//	    clinica_form.setSenha(senhaHash);
+    @Autowired
+    private PasswordEncoder passwordEncoder; // já é um Bean, graças ao SecurityConfig
 
-	    Clinica clinica_banco = repClinica.save(clinica_form);
+    @GetMapping("/cadastro-clinica")
+    public ModelAndView paginaCadastroClinica() {
+        ModelAndView mv = new ModelAndView("/clinica/novaClinica");
+        mv.addObject("clinica", new Clinica());
+        return mv;
+    }
 
-	    return new ModelAndView("redirect:/login");
-	}
+    @PostMapping("/cadastrar_clinica")
+    public ModelAndView cadastrarClinica(@Valid Clinica clinica_form, BindingResult bd) {
 
+        if (bd.hasErrors()) {
+            ModelAndView mv = new ModelAndView("/clinica/novaClinica");
+            mv.addObject("clinica", clinica_form);
+            return mv;
+        }
+
+        // Guarda a senha em texto puro ANTES de virar hash,
+        // pois vamos reaproveitá-la para o login (Usuario)
+        String senhaDigitada = clinica_form.getSenha();
+
+        // ESSENCIAL: nunca salvar senha em texto puro na Clinica
+        clinica_form.setSenha(passwordEncoder.encode(senhaDigitada));
+
+        Clinica clinica_banco = repClinica.save(clinica_form);
+
+        // Cria o Usuario de login, vinculado a essa Clinica
+        Usuario usuario = new Usuario();
+        usuario.setUsername(clinica_banco.getEmail());
+        usuario.setSenha(passwordEncoder.encode(senhaDigitada));
+        usuario.setClinica(clinica_banco);
+        usuario.setTipo(TipoUsuarioEnum.CLINICA);
+        repUsuario.save(usuario);
+
+        return new ModelAndView("redirect:/login");
+    }
+    
+    
+    @GetMapping("/clinica/perfil")
+    public ModelAndView paginaPerfilClinica(Authentication auth) {
+        ModelAndView mv = new ModelAndView("/clinica/perfil");
+        
+        String username= auth.getName();
+        
+        Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+        if (opUsuario.isEmpty()) {return new ModelAndView("redirect:/login");}
+        
+        Clinica infoClinicaLogada = opUsuario.get().getClinica();
+        mv.addObject("clinica",infoClinicaLogada);
+        
+        return mv;
+    }
+    
 }
