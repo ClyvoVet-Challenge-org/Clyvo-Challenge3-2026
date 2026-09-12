@@ -24,7 +24,9 @@ public class SecurityConfig {
 										"/clinica/veterinarios/{id}",
 										"/clinica/veterinarios/novo",
 										"/clinica/perfil",
-										"/clinica/veterinario/salvar"
+										"/clinica/veterinario/salvar",
+										"/clinica/edicao",
+										"/clinica/atualizar"
 								).hasAuthority("CLINICA")
 								.requestMatchers(
 										"/vet/edicao",

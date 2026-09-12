@@ -22,65 +22,113 @@ import jakarta.validation.Valid;
 @Controller
 public class ClinicaController {
 
-    @Autowired
-    private ClinicaRepository repClinica;
+	@Autowired
+	private ClinicaRepository repClinica;
 
-    @Autowired
-    private UsuarioRepository repUsuario;
+	@Autowired
+	private UsuarioRepository repUsuario;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder; // já é um Bean, graças ao SecurityConfig
+	@Autowired
+	private PasswordEncoder passwordEncoder; // já é um Bean, graças ao SecurityConfig
 
-    @GetMapping("/cadastro-clinica")
-    public ModelAndView paginaCadastroClinica() {
-        ModelAndView mv = new ModelAndView("/clinica/novaClinica");
-        mv.addObject("clinica", new Clinica());
-        return mv;
-    }
+	@GetMapping("/cadastro-clinica")
+	public ModelAndView paginaCadastroClinica() {
+		ModelAndView mv = new ModelAndView("/clinica/novaClinica");
+		mv.addObject("clinica", new Clinica());
+		return mv;
+	}
 
-    @PostMapping("/cadastrar_clinica")
-    public ModelAndView cadastrarClinica(@Valid Clinica clinica_form, BindingResult bd) {
+	@PostMapping("/cadastrar_clinica")
+	public ModelAndView cadastrarClinica(@Valid Clinica clinica_form, BindingResult bd) {
 
-        if (bd.hasErrors()) {
-            ModelAndView mv = new ModelAndView("/clinica/novaClinica");
-            mv.addObject("clinica", clinica_form);
-            return mv;
-        }
+		if (bd.hasErrors()) {
+			ModelAndView mv = new ModelAndView("/clinica/novaClinica");
+			mv.addObject("clinica", clinica_form);
+			return mv;
+		}
 
-        // Guarda a senha em texto puro ANTES de virar hash,
-        // pois vamos reaproveitá-la para o login (Usuario)
-        String senhaDigitada = clinica_form.getSenha();
+		// Guarda a senha em texto puro ANTES de virar hash,
+		// pois vamos reaproveitá-la para o login (Usuario)
+		String senhaDigitada = clinica_form.getSenha();
 
-        // ESSENCIAL: nunca salvar senha em texto puro na Clinica
-        clinica_form.setSenha(passwordEncoder.encode(senhaDigitada));
+		// ESSENCIAL: nunca salvar senha em texto puro na Clinica
+		clinica_form.setSenha(passwordEncoder.encode(senhaDigitada));
 
-        Clinica clinica_banco = repClinica.save(clinica_form);
+		Clinica clinica_banco = repClinica.save(clinica_form);
 
-        // Cria o Usuario de login, vinculado a essa Clinica
-        Usuario usuario = new Usuario();
-        usuario.setUsername(clinica_banco.getEmail());
-        usuario.setSenha(passwordEncoder.encode(senhaDigitada));
-        usuario.setClinica(clinica_banco);
-        usuario.setTipo(TipoUsuarioEnum.CLINICA);
-        repUsuario.save(usuario);
+		// Cria o Usuario de login, vinculado a essa Clinica
+		Usuario usuario = new Usuario();
+		usuario.setUsername(clinica_banco.getEmail());
+		usuario.setSenha(passwordEncoder.encode(senhaDigitada));
+		usuario.setClinica(clinica_banco);
+		usuario.setTipo(TipoUsuarioEnum.CLINICA);
+		repUsuario.save(usuario);
 
-        return new ModelAndView("redirect:/login");
-    }
-    
-    
-    @GetMapping("/clinica/perfil")
-    public ModelAndView paginaPerfilClinica(Authentication auth) {
-        ModelAndView mv = new ModelAndView("/clinica/perfil");
-        
-        String username= auth.getName();
-        
-        Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
-        if (opUsuario.isEmpty()) {return new ModelAndView("redirect:/login");}
-        
-        Clinica infoClinicaLogada = opUsuario.get().getClinica();
-        mv.addObject("clinica",infoClinicaLogada);
-        
-        return mv;
-    }
-    
+		return new ModelAndView("redirect:/login");
+	}
+
+	@GetMapping("/clinica/perfil")
+	public ModelAndView paginaPerfilClinica(Authentication auth) {
+		ModelAndView mv = new ModelAndView("/clinica/perfil");
+
+		String username = auth.getName();
+
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+		if (opUsuario.isEmpty()) {
+			return new ModelAndView("redirect:/login");
+		}
+
+		Clinica infoClinicaLogada = opUsuario.get().getClinica();
+		mv.addObject("clinica", infoClinicaLogada);
+
+		return mv;
+	}
+
+	@GetMapping("/clinica/edicao")
+	public ModelAndView paginaEdicaoClinica(Authentication auth) {
+
+		String username = auth.getName();
+
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+		if (opUsuario.isEmpty()) {
+			return new ModelAndView("redirect:/login");
+		}
+
+		Clinica infoClinicaLogada = opUsuario.get().getClinica();
+
+		ModelAndView mv = new ModelAndView("/clinica/edicao");
+
+		mv.addObject("clinica", infoClinicaLogada);
+
+		return mv;
+	}
+
+	@PostMapping("/clinica/atualizar")
+	public ModelAndView funcaoAtualizar(Authentication auth, @Valid Clinica clinicaForm, BindingResult bd) {
+
+		String username = auth.getName();
+
+		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
+		if (opUsuario.isEmpty()) {
+			return new ModelAndView("redirect:/login");
+		}
+		
+		if (bd.hasErrors()) {
+			ModelAndView mv = new ModelAndView("/clinica/edicao");
+			mv.addObject("clinica", clinicaForm);
+			return mv;
+		}
+
+		Clinica ClinicaLogada = opUsuario.get().getClinica();
+		
+		ClinicaLogada.setNome(clinicaForm.getNome());
+		ClinicaLogada.setCnpj(clinicaForm.getCnpj());
+		ClinicaLogada.setEmail(clinicaForm.getEmail());
+		ClinicaLogada.setSenha(passwordEncoder.encode(clinicaForm.getSenha()));	
+		
+		repClinica.save(ClinicaLogada);
+		
+
+		return new ModelAndView("redirect:/clinica/perfil");
+	}
 }
