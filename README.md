@@ -60,6 +60,10 @@ Substitua:
 * `SEU_USUARIO` pelo usuário do MySQL;
 * `SUA_SENHA` pela senha do usuário do MySQL.
 
+### 3. Rode a aplicação:
+   ```bash
+   mvn spring-boot:run
+   ```
 
 ## Arquitetura do Projeto
 
