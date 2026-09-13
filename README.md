@@ -2,6 +2,14 @@
 
 Sistema de gestão da operação de clínicas e veterinários.
 
+Link Vídeo: [https://youtu.be/Wt7WvxqQm9o](https://youtu.be/Wt7WvxqQm9o)
+
+## Integrantes
+* Eduardo Batista Locaspi - RM561713 - 2TDSPI
+* Victor Alves Lopes - RM561833 - 2TDSPI
+* Liana Lyumi Morisita Fujisima - RM565698 - 2TDSPI
+* Letícia Santiago e Silva - RM565799 - 2TDSPW
+
 ## Desafio apresentado (e solução)
 
 A falta de recorrência de responsáveis em consultas de check-up pode acabar agravando casos de determinadas doenças. Para ser mais preciso, os responsáveis podem ter dificuldades para analisar o contexto quando não possuem dados para se basear.
