@@ -17,7 +17,7 @@ public class SecurityConfig {
 
 		return http
 				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/login", "/cadastro-clinica", "/cadastrar_clinica","/cadastro-veterinario","/cadastro_veterinario","/").permitAll() // Permite
+						auth -> auth.requestMatchers("/login", "/cadastro-clinica", "/cadastrar_clinica","/cadastro-veterinario","/cadastrar-veterinario","/").permitAll() // Permite
 																														// todos
 								.requestMatchers(
 										"/clinica/veterinarios",

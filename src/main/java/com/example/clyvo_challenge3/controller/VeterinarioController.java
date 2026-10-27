@@ -269,7 +269,7 @@ public class VeterinarioController {
 	}
 	
 	// TODOS PODEM ACESSAR
-	@PostMapping("/cadastrar_veterinario")
+	@PostMapping("/cadastrar-veterinario")
 	public ModelAndView cadastrarVeterinario(
 	        @Valid Veterinario veterinario_form,
 	        BindingResult bd) {

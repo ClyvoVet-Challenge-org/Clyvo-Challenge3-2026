@@ -39,26 +39,26 @@ public class ResponsavelController {
 //		return mv;
 //	}
 
-//	@GetMapping("/responsaveis/{id}")
-//	public ModelAndView paginaDetalhes(@PathVariable Long id){
-//		ModelAndView mv = new ModelAndView("responsavel/detalhes");
-//		
-//		Optional<Responsavel> op = repResponsavel.findById(id);
-//		
-//
-//		if (op.isPresent()) {
-//			Responsavel responsavel = op.get();
-//			mv.addObject("responsavel",responsavel);
-//			List<Animal> animais = responsavel.getAnimais();
-//			mv.addObject("animais",animais);			
-//			return mv;
-//			
-//		}
-//		
-//		
-//		// Usuario Inexistente
-//		return new ModelAndView("redirect:/responsaveis");
-//	}
+	@GetMapping("/responsaveis/{id}")
+	public ModelAndView paginaDetalhes(@PathVariable Long id){
+		ModelAndView mv = new ModelAndView("responsavel/detalhes");
+		
+		Optional<Responsavel> op = repResponsavel.findById(id);
+		
+
+		if (op.isPresent()) {
+			Responsavel responsavel = op.get();
+			mv.addObject("responsavel",responsavel);
+			List<Animal> animais = responsavel.getAnimais();
+			mv.addObject("animais",animais);			
+			return mv;
+			
+		}
+		
+		
+		// Usuario Inexistente
+		return new ModelAndView("redirect:/responsaveis");
+	}
 	
 //	@GetMapping("/cadastro-responsavel")
 //	public ModelAndView paginaCadastroResponsavel() {
