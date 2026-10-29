@@ -10,10 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.clyvo_challenge3.dto.request.VeterinarioEdicaoRequest;
 import com.example.clyvo_challenge3.model.Clinica;
 import com.example.clyvo_challenge3.model.ClinicaVeterinario;
 import com.example.clyvo_challenge3.model.Consulta;
@@ -149,11 +151,11 @@ public class VeterinarioController {
 
 		return mv;
 
-	}
+	};
 	
 	// APENAS : VETERINARIO LOGADO
 	@PostMapping("/vet/atualizar")
-	public ModelAndView funcaoAtualizarVeterinario(Authentication authentication, @Valid Veterinario veterinario,
+	public ModelAndView funcaoAtualizarVeterinario(Authentication authentication, @Valid @ModelAttribute("veterinario") VeterinarioEdicaoRequest veterinarioForm,
 			BindingResult bd) {
 
 		String username = authentication.getName();
@@ -171,12 +173,14 @@ public class VeterinarioController {
 		if (bd.hasErrors()) {
 			ModelAndView mv = new ModelAndView("/veterinario/edicao");
 
-			mv.addObject("veterinario", veterinario);
+			mv.addObject("veterinario", veterinarioForm);
 
 			return mv;
 		}
+		
+		
 
-		veterinarioLogado.transferirVeterinario(veterinario);
+		veterinarioLogado.atualizarVeterinario(veterinarioForm);
 
 		repVet.save(veterinarioLogado);
 

@@ -38,14 +38,6 @@
 				<div style="color: red;" th:if="${#fields.hasErrors('crmv')}"
 					th:errors="*{crmv}"></div>
 
-				E-mail: <input class="form-control" type="text" th:field="*{email}" readonly><br>
-				<div style="color: red;" th:if="${#fields.hasErrors('email')}"
-					th:errors="*{email}"></div>
-
-				Senha: <input class="form-control" type="password" th:field="*{senha}"><br>
-				<div style="color: red;" th:if="${#fields.hasErrors('senha')}"
-					th:errors="*{senha}"></div>
-
 				<button type="submit">Editar</button>
 
 			</form>

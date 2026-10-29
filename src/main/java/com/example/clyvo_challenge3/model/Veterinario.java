@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import com.example.clyvo_challenge3.dto.request.VeterinarioEdicaoRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -130,13 +132,10 @@ public class Veterinario {
 		this.clinicas = clinicas;
 	}
 
-	public void transferirVeterinario(Veterinario veterinario) {
-		this.nome = veterinario.getNome();
-        this.cpf = veterinario.getCpf();
-        this.crmv = veterinario.getCrmv();
-        this.email = veterinario.getEmail();
-        this.senha = veterinario.getSenha();
-		
+	public void atualizarVeterinario(VeterinarioEdicaoRequest veterinario) {
+		this.nome = veterinario.nome();
+        this.cpf = veterinario.cpf();
+        this.crmv = veterinario.crmv();
 	}
 	
 }
