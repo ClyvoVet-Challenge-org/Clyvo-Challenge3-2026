@@ -16,14 +16,14 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<h1>Editar Vetrinário</h1>
+			<h1>Editar Veterinário</h1>
 		</div>
 		<div class="row">
 
 			<form th:object="${veterinario}"
 				th:action="@{/vet/atualizar}"
 				method="post">
-				
+
 				<input type="hidden" name="_csrf" th:value="${_csrf.token}">
 
 				Nome: <input class="form-control" type="text" th:field="*{nome}"><br>
@@ -33,16 +33,16 @@
 				CPF: <input class="form-control" type="text" th:field="*{cpf}"><br>
 				<div style="color: red;" th:if="${#fields.hasErrors('cpf')}"
 					th:errors="*{cpf}"></div>
-					
+
 				CRMV: <input class="form-control" type="text" th:field="*{crmv}"><br>
 				<div style="color: red;" th:if="${#fields.hasErrors('crmv')}"
 					th:errors="*{crmv}"></div>
 
-				E-mail: <input class="form-control" type="text" th:field="*{email}"><br>
+				E-mail: <input class="form-control" type="text" th:field="*{email}" readonly><br>
 				<div style="color: red;" th:if="${#fields.hasErrors('email')}"
 					th:errors="*{email}"></div>
-				
-				Senha: <input class="form-control" type="text" th:field="*{senha}"><br>
+
+				Senha: <input class="form-control" type="password" th:field="*{senha}"><br>
 				<div style="color: red;" th:if="${#fields.hasErrors('senha')}"
 					th:errors="*{senha}"></div>
 
@@ -52,7 +52,7 @@
 
 		</div>
 		<div class="row">
-			<a href="/vets">Home Page</a>
+			<a th:href="@{/vet/perfil}">Voltar ao perfil</a>
 		</div>
 	</div>
 

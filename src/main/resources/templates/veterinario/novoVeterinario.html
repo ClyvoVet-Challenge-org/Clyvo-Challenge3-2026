@@ -33,7 +33,9 @@
 		    <h1>Novo Veterinário</h1>
 		    <p class="text-muted" th:if="${clinica != null}">Clínica: <strong th:text="${clinica.nome}"></strong></p>
 		
-		    <form th:object="${veterinario}" th:action="@{/clinica/veterinarios/salvar}" method="post">
+			<form th:object="${veterinario}"
+			      th:action="${clinica != null} ? @{/clinica/veterinarios/salvar} : @{/cadastrar-veterinario}"
+			      method="post">
 		
 		        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
 		
@@ -68,7 +70,7 @@
 		        </div>
 		
 		        <button type="submit" class="btn btn-primary">Cadastrar</button>
-		        <a href="/clinica/veterinarios" class="btn btn-secondary">Cancelar</a>
+				<a th:href="${clinica != null} ? @{/clinica/veterinarios} : @{/login}" class="btn btn-secondary">Cancelar</a>
 		
 		    </form>
 		

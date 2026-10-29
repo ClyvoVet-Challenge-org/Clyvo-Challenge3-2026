@@ -56,7 +56,9 @@
 				</thead>
 				<tbody>
 					<tr th:each="veterinario : ${veterinarios}">
-						<td th:text="${veterinario.nome}">Dra. Camila Torres</td>
+						<td>
+							<a th:href="@{/clinica/veterinarios/{id}(id=${veterinario.id})}" th:text="${veterinario.nome}">Dra. Camila Torres</a>
+						</td>
 						<td th:text="${veterinario.cpf}">181.990.622-15</td>
 						<td th:text="${veterinario.crmv}">PR11223</td>
 						<td th:text="${veterinario.email}">camila@email.com</td>
