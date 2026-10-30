@@ -16,30 +16,20 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 		return http
-				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/login", "/cadastro-clinica", "/cadastrar_clinica","/cadastro-veterinario","/cadastrar-veterinario","/").permitAll() // Permite
-																														// todos
-								.requestMatchers(
-										"/clinica/veterinarios",
-										"/clinica/veterinarios/{id}",
-										"/clinica/veterinarios/novo",
-										"/clinica/perfil",
-										"/clinica/veterinario/salvar",
-										"/clinica/edicao",
-										"/clinica/atualizar"
-								).hasAuthority("CLINICA")
-								.requestMatchers(
-										"/vet/edicao",
-										"/vet/perfil",
-										"/vet/atualizar",
-										"/vet/minhas-consultas"
-								).hasAuthority("VETERINARIO")
-								.anyRequest().authenticated())
+				.authorizeHttpRequests(auth -> auth
+						// Paginas publicas (login e cadastros)
+						.requestMatchers("/", "/login",
+								"/cadastro-clinica", "/cadastrar_clinica",
+								"/cadastro-veterinario", "/cadastrar-veterinario").permitAll()
+						// Areas separadas por perfil
+						.requestMatchers("/clinica/**").hasAuthority("CLINICA")
+						.requestMatchers("/vet/**", "/animais/**", "/responsaveis/**").hasAuthority("VETERINARIO")
+						.anyRequest().authenticated())
 				.formLogin(form -> form.loginPage("/login").defaultSuccessUrl("/home", true))
 				.logout(config -> config.logoutSuccessUrl("/login"))
-				.exceptionHandling((exception) -> exception.accessDeniedHandler((request, response, AccessDeniedException) -> {
-							response.sendRedirect("/acesso-negado");
-						}))
+				.exceptionHandling(exception -> exception.accessDeniedHandler((request, response, e) -> {
+					response.sendRedirect("/acesso-negado");
+				}))
 				.build();
 	}
 
