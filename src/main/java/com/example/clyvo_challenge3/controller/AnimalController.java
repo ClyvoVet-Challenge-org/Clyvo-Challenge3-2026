@@ -54,7 +54,7 @@ public class AnimalController {
 		}
 
 		// Animal inexistente
-		return new ModelAndView("redirect:/animais");
+		return new ModelAndView("redirect:/home");
 	}
 
 	
@@ -89,7 +89,7 @@ public class AnimalController {
 
 		// Esse id existe no banco?
 		if (opResponsavel.isEmpty()) {
-			ModelAndView mv = new ModelAndView("redirect:/responsaveis");
+			ModelAndView mv = new ModelAndView("redirect:/home");
 			return mv;
 		}
 
@@ -115,7 +115,7 @@ public class AnimalController {
 		Optional<Responsavel> opResponsavel = repResponsavel.findById(idResponsavel);
 		// Esse id existe?
 		if (opResponsavel.isEmpty()) {
-			return new ModelAndView("redirect:/responsaveis");
+			return new ModelAndView("redirect:/home");
 		}
 
 		// Esse id é o mesmo que fez a login e se autenticou?
@@ -152,7 +152,7 @@ public class AnimalController {
 
 	    Optional<Animal> opAnimal = repAnimal.findById(idAnimal);
 	    if (opAnimal.isEmpty()) {
-	        return new ModelAndView("redirect:/animais");
+	        return new ModelAndView("redirect:/home");
 	    }
 	    Animal animal = opAnimal.get();
 

@@ -55,9 +55,8 @@ public class ResponsavelController {
 			
 		}
 		
-		
 		// Usuario Inexistente
-		return new ModelAndView("redirect:/responsaveis");
+		return new ModelAndView("redirect:/home");
 	}
 	
 //	@GetMapping("/cadastro-responsavel")
@@ -137,7 +136,7 @@ public class ResponsavelController {
 		}
 		
 		
-		return new ModelAndView("redirect:/responsaveis");
+		return new ModelAndView("redirect:/home");
 		
 	}
 //																NÃO PERMITIDO
