@@ -17,6 +17,12 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long>{
 			+ "WHERE c.veterinarioClinica.veterinario.id = :idVeterinario")
 	List<Consulta> findByVeterinario(@Param("idVeterinario") Long iVeterinario);
 	
+	@Query("SELECT COUNT(c) > 0 FROM Consulta c "
+			+ "WHERE c.veterinarioClinica.veterinario.id = :idVeterinario "
+			+ "AND c.animal.responsavel.id = :idResponsavel")
+	boolean veterinarioAtendeResponsavel(@Param("idVeterinario") Long idVeterinario,
+			@Param("idResponsavel") Long idResponsavel);
+	
 	
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.clyvo_challenge3.model.Animal;
-import com.example.clyvo_challenge3.model.EnderecoResponsavel;
 import com.example.clyvo_challenge3.model.Responsavel;
-import com.example.clyvo_challenge3.repository.EnderecoResponsavelRepository;
 import com.example.clyvo_challenge3.repository.ResponsavelRepository;
+import com.example.clyvo_challenge3.service.AcessoService;
 
 import jakarta.validation.Valid;
 
@@ -25,6 +25,9 @@ public class ResponsavelController {
 	
 	@Autowired
 	private ResponsavelRepository repResponsavel;
+	
+	@Autowired
+	private AcessoService acesso;
 	
 
 	
@@ -40,13 +43,18 @@ public class ResponsavelController {
 //	}
 
 	@GetMapping("/responsaveis/{id}")
-	public ModelAndView paginaDetalhes(@PathVariable Long id){
+	public ModelAndView paginaDetalhes(Authentication authentication,@PathVariable Long id){
 		ModelAndView mv = new ModelAndView("responsavel/detalhes");
 		
 		Optional<Responsavel> op = repResponsavel.findById(id);
 		
 
 		if (op.isPresent()) {
+			
+			if (!acesso.veterinarioAcessaResponsavel(authentication, id)) {
+				return new ModelAndView("redirect:/acesso-negado");
+			}
+			
 			Responsavel responsavel = op.get();
 			mv.addObject("responsavel",responsavel);
 			List<Animal> animais = responsavel.getAnimais();
@@ -113,11 +121,15 @@ public class ResponsavelController {
 //	}
 	
 	@PostMapping("/responsaveis/atualizar/{id}")
-	public ModelAndView funcaoAtualizarResponsavel(@PathVariable Long id,@Valid Responsavel responsavel, BindingResult bd) {
+	public ModelAndView funcaoAtualizarResponsavel(Authentication authentication,@PathVariable Long id,@Valid Responsavel responsavel, BindingResult bd) {
 		
 		
 		Optional<Responsavel> op = repResponsavel.findById(id);
 		if (op.isPresent()) {
+			
+			if (!acesso.veterinarioAcessaResponsavel(authentication, id)) {
+				return new ModelAndView("redirect:/acesso-negado");
+			}
 
 			
 			Responsavel responsavel_banco = op.get();

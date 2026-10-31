@@ -1,9 +1,9 @@
 package com.example.clyvo_challenge3.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +18,7 @@ import com.example.clyvo_challenge3.model.EnderecoAnimal;
 import com.example.clyvo_challenge3.model.Responsavel;
 import com.example.clyvo_challenge3.repository.AnimalRepository;
 import com.example.clyvo_challenge3.repository.ResponsavelRepository;
+import com.example.clyvo_challenge3.service.AcessoService;
 
 import jakarta.validation.Valid;
 
@@ -29,6 +30,9 @@ public class AnimalController {
 
 	@Autowired
 	private ResponsavelRepository repResponsavel;
+	
+	@Autowired
+	private AcessoService acesso;
 
 //	@GetMapping("/animais")
 //	public ModelAndView paginaListagemAnimais() {
@@ -41,12 +45,18 @@ public class AnimalController {
 //	}
 
 	@GetMapping("/animais/{id}")
-	public ModelAndView paginaDetalhes(@PathVariable Long id) {
+	public ModelAndView paginaDetalhes(Authentication authentication, @PathVariable Long id) {
 		ModelAndView mv = new ModelAndView("animal/detalhes");
 
 		Optional<Animal> op = repAnimal.findById(id);
 
 		if (op.isPresent()) {
+			// Não é seu paciente
+			if (!acesso.veterinarioAcessaAnimal(authentication, id)) {
+				return new ModelAndView("redirect:/acesso-negado");
+			}
+			
+			
 			Animal animal = op.get();
 			mv.addObject("animal", animal);
 			mv.addObject("vacinacoes", animal.getVacinacoes());
@@ -57,26 +67,11 @@ public class AnimalController {
 		return new ModelAndView("redirect:/home");
 	}
 
-	
-//									Inutilizado, pois a criação de um animal deve partir do responsável
-//	@GetMapping("/cadastro-animal")
-//	public ModelAndView paginaCadastroAnimal() {
-//		ModelAndView mv = new ModelAndView("animal/novoAnimal");
-//
-//		Animal animal = new Animal();
-//		mv.addObject("animal", animal);
-//
-//		List<Responsavel> responsaveis = repResponsavel.findAll();
-//		mv.addObject("responsaveis", responsaveis);
-//
-//		return mv;
-//	}
-
 	// =============== CREATE ==================
 
 	// FALTA AUTENTICACAO
 	@GetMapping("/responsaveis/{idResponsavel}/animais/novo")
-	public ModelAndView paginaCadastroAnimalTeste(@PathVariable Long idResponsavel) {
+	public ModelAndView paginaCadastroAnimalTeste(Authentication authentication, @PathVariable Long idResponsavel) {
 
 		// OBJETIVO : CRIAR UM NOVO ANIMAL
 		// CONFIRMAR SE O ID DO RESPONSAVEL(URL) EXISTE
@@ -91,6 +86,10 @@ public class AnimalController {
 		if (opResponsavel.isEmpty()) {
 			ModelAndView mv = new ModelAndView("redirect:/home");
 			return mv;
+		}
+		
+		if (!acesso.veterinarioAcessaResponsavel(authentication, idResponsavel)) {
+			return new ModelAndView("redirect:/acesso-negado");
 		}
 
 		// Esse id é o mesmo que fez a login e se autenticou?
@@ -110,15 +109,17 @@ public class AnimalController {
 
 	// FALTA AUTENTICACAO
 	@PostMapping("/responsaveis/{idResponsavel}/animais/salvar") // action do formulario de animal
-	public ModelAndView cadastrarAnimal(@PathVariable Long idResponsavel, @Valid Animal animal_form, BindingResult bd) {
+	public ModelAndView cadastrarAnimal(Authentication authentication,@PathVariable Long idResponsavel, @Valid Animal animal_form, BindingResult bd) {
 
 		Optional<Responsavel> opResponsavel = repResponsavel.findById(idResponsavel);
 		// Esse id existe?
 		if (opResponsavel.isEmpty()) {
 			return new ModelAndView("redirect:/home");
 		}
-
-		// Esse id é o mesmo que fez a login e se autenticou?
+		
+		if (!acesso.veterinarioAcessaResponsavel(authentication, idResponsavel)) {
+			return new ModelAndView("redirect:/acesso-negado");
+		}
 
 		Responsavel responsavel = opResponsavel.get();
 
@@ -148,12 +149,17 @@ public class AnimalController {
 	// =============== UPDATE ===================
 
 	@GetMapping("/responsaveis/animais/edicao/{idAnimal}")
-	public ModelAndView paginaEdicaoAnimal(@PathVariable Long idAnimal) {
+	public ModelAndView paginaEdicaoAnimal(Authentication authentication,@PathVariable Long idAnimal) {
 
 	    Optional<Animal> opAnimal = repAnimal.findById(idAnimal);
 	    if (opAnimal.isEmpty()) {
 	        return new ModelAndView("redirect:/home");
 	    }
+	    
+		if (!acesso.veterinarioAcessaAnimal(authentication, idAnimal)) {
+			return new ModelAndView("redirect:/acesso-negado");
+		}
+	    
 	    Animal animal = opAnimal.get();
 
 	    // Converte a ENTIDADE para o DTO, só para preencher o formulário
@@ -185,36 +191,30 @@ public class AnimalController {
 	}
 
 	@PostMapping("/responsaveis/animais/atualizar/{idAnimal}")
-	public ModelAndView funcaoAtualizarAnimal(@PathVariable Long idAnimal, @Valid AnimalEdicaoDTO animal_form, BindingResult bd) {
+	public ModelAndView funcaoAtualizarAnimal(Authentication authentication, @PathVariable Long idAnimal,
+			@Valid AnimalEdicaoDTO animal_form, BindingResult bd) {
 
-//		Optional<Responsavel> opResponsavel = repResponsavel.findById(idResponsavel);
-//		if (opResponsavel.isEmpty()) {
-//			return new ModelAndView("redirect:/responsaveis");
-//		}
-//		Responsavel responsavel = opResponsavel.get();
-
-		// Autenticacao
-
-		// 2) O animal existe?
+		// O animal existe?
 		Optional<Animal> opAnimal = repAnimal.findById(idAnimal);
-//		if (opAnimal.isEmpty()) {
-//			return new ModelAndView("redirect:/responsaveis/" + idResponsavel);
-//		}
-		Animal animal_banco = opAnimal.get();
-
-		// 3) O animal realmente pertence a esse responsável?
-//		if (!animal_banco.getResponsavel().getId().equals(idResponsavel)) {
-//			return new ModelAndView("redirect:/responsaveis/" + idResponsavel);
-//		}
-
-		if (bd.hasErrors()) {
-		    ModelAndView mv = new ModelAndView("animal/edicao");
-		    mv.addObject("animal", animal_banco); // tem responsavel, usado só para exibir o nome dele
-		    mv.addObject("animalForm", animal_form); // dados digitados, para reexibir nos campos com erro
-		    return mv;
+		if (opAnimal.isEmpty()) {
+			return new ModelAndView("redirect:/home");
 		}
 
-		// Copia os campos básicos do animal (já está certo)
+		// O veterinario logado atende o responsavel deste animal?
+		if (!acesso.veterinarioAcessaAnimal(authentication, idAnimal)) {
+			return new ModelAndView("redirect:/acesso-negado");
+		}
+
+		Animal animal_banco = opAnimal.get();
+
+		if (bd.hasErrors()) {
+			ModelAndView mv = new ModelAndView("animal/edicao");
+			mv.addObject("animal", animal_banco); // tem responsavel, usado so para exibir o nome dele
+			mv.addObject("animalForm", animal_form); // dados digitados, para reexibir nos campos com erro
+			return mv;
+		}
+
+		// Copia os campos basicos do animal
 		animal_banco.setNome(animal_form.getNome());
 		animal_banco.setDataNascimento(animal_form.getDataNascimento());
 		animal_banco.setPeso(animal_form.getPeso());
@@ -223,8 +223,8 @@ public class AnimalController {
 		animal_banco.setRg(animal_form.getRg());
 		animal_banco.setNumeroMicrochip(animal_form.getNumeroMicrochip());
 
-		// CORREÇÃO: copiar para a ENTIDADE EnderecoAnimal que já existe em animal_banco
-		EnderecoAnimal enderecoAnimal = animal_banco.getEnderecoAnimal(); 
+		// Copia para a entidade EnderecoAnimal que ja existe em animal_banco
+		EnderecoAnimal enderecoAnimal = animal_banco.getEnderecoAnimal();
 		enderecoAnimal.setPais(animal_form.getEnderecoAnimal().getPais());
 		enderecoAnimal.setEstado(animal_form.getEnderecoAnimal().getEstado());
 		enderecoAnimal.setCidade(animal_form.getEnderecoAnimal().getCidade());
@@ -233,15 +233,10 @@ public class AnimalController {
 		enderecoAnimal.setNumeroRua(animal_form.getEnderecoAnimal().getNumeroRua());
 		enderecoAnimal.setComplemento(animal_form.getEnderecoAnimal().getComplemento());
 		enderecoAnimal.setCep(animal_form.getEnderecoAnimal().getCep());
-		
-		System.out.println(animal_banco.getResponsavel());
 
 		repAnimal.save(animal_banco);
-		
-		System.out.println("FUNÇÃO: EDITAR FUNCIONOU CORRETAMENTE");
 
 		return new ModelAndView("redirect:/animais/" + animal_banco.getId());
-
 	}
 
 //																NÃO PERMITIDO
