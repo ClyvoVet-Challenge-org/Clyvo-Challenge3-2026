@@ -112,22 +112,27 @@ public class ClinicaController {
 		if (opUsuario.isEmpty()) {
 			return new ModelAndView("redirect:/login");
 		}
-		
+
 		if (bd.hasErrors()) {
 			ModelAndView mv = new ModelAndView("/clinica/edicao");
 			mv.addObject("clinica", clinicaForm);
 			return mv;
 		}
 
-		Clinica ClinicaLogada = opUsuario.get().getClinica();
-		
-		ClinicaLogada.setNome(clinicaForm.getNome());
-		ClinicaLogada.setCnpj(clinicaForm.getCnpj());
-		ClinicaLogada.setEmail(clinicaForm.getEmail());
-		ClinicaLogada.setSenha(passwordEncoder.encode(clinicaForm.getSenha()));	
-		
-		repClinica.save(ClinicaLogada);
-		
+		Usuario usuario = opUsuario.get();
+		Clinica clinicaLogada = usuario.getClinica();
+		String hash = passwordEncoder.encode(clinicaForm.getSenha());
+
+		// O e-mail e o login e nao e alterado aqui
+		clinicaLogada.setNome(clinicaForm.getNome());
+		clinicaLogada.setCnpj(clinicaForm.getCnpj());
+		clinicaLogada.setSenha(hash);
+
+		// Mantem a senha de login (tabela usuario) igual a da clinica
+		usuario.setSenha(hash);
+		repUsuario.save(usuario);
+
+		repClinica.save(clinicaLogada);
 
 		return new ModelAndView("redirect:/clinica/perfil");
 	}
