@@ -253,7 +253,7 @@ public class VeterinarioController {
 			return mv;
 		}
 		
-		Veterinario veterinarioSalvo= repVet.save(veterinario);
+		Veterinario veterinarioSalvo = cadastrarVeterinarioComLogin(veterinario);
 		
 		ClinicaVeterinario clivet = new ClinicaVeterinario();
 		clivet.setClinica(clinica);
@@ -272,41 +272,18 @@ public class VeterinarioController {
 	    return mv;
 	}
 	
-	// TODOS PODEM ACESSAR
 	@PostMapping("/cadastrar-veterinario")
-	public ModelAndView cadastrarVeterinario(
-	        @Valid Veterinario veterinario_form,
-	        BindingResult bd) {
+	public ModelAndView cadastrarVeterinario(@Valid Veterinario veterinario_form, BindingResult bd) {
 
-	    if (bd.hasErrors()) {
-	        ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
-	        mv.addObject("veterinario", veterinario_form);
-	        return mv;
-	    }
+		if (bd.hasErrors()) {
+			ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
+			mv.addObject("veterinario", veterinario_form);
+			return mv;
+		}
 
-	    String senhaDigitada = veterinario_form.getSenha();
+		cadastrarVeterinarioComLogin(veterinario_form);
 
-	    // Cria o veterinário
-	    veterinario_form.setSenha(
-	        passwordEncoder.encode(senhaDigitada)
-	    );
-
-	    Veterinario veterinarioBanco =
-	            repVet.save(veterinario_form);
-
-	    // Cria o usuário responsável pelo login
-	    Usuario usuario = new Usuario();
-
-	    usuario.setUsername(veterinarioBanco.getEmail());
-	    usuario.setSenha(
-	        passwordEncoder.encode(senhaDigitada)
-	    );
-	    usuario.setTipo(TipoUsuarioEnum.VETERINARIO);
-	    usuario.setVeterinario(veterinarioBanco);
-
-	    repUsuario.save(usuario);
-
-	    return new ModelAndView("redirect:/login");
+		return new ModelAndView("redirect:/login");
 	}
 	
 	// APENAS: VETERINARIO
@@ -327,5 +304,22 @@ public class VeterinarioController {
 
 		return mv;
 		}
+	
+	// Salva o veterinario com senha criptografada e cria o usuario usado no login
+	private Veterinario cadastrarVeterinarioComLogin(Veterinario veterinario) {
+		String hash = passwordEncoder.encode(veterinario.getSenha());
+		veterinario.setSenha(hash);
+
+		Veterinario salvo = repVet.save(veterinario);
+
+		Usuario usuario = new Usuario();
+		usuario.setUsername(salvo.getEmail());
+		usuario.setSenha(hash);
+		usuario.setTipo(TipoUsuarioEnum.VETERINARIO);
+		usuario.setVeterinario(salvo);
+		repUsuario.save(usuario);
+
+		return salvo;
+	}
 
 }
