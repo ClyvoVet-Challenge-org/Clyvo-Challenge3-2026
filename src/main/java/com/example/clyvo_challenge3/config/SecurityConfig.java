@@ -17,8 +17,8 @@ public class SecurityConfig {
 
 		return http
 				.authorizeHttpRequests(auth -> auth
-						// Paginas publicas (login e cadastros)
-						.requestMatchers("/", "/login",
+						// Paginas publicas (login, erro e cadastros)
+						.requestMatchers("/", "/login", "/error",
 								"/cadastro-clinica", "/cadastrar_clinica",
 								"/cadastro-veterinario", "/cadastrar-veterinario").permitAll()
 						// Areas separadas por perfil
