@@ -22,7 +22,7 @@ Challenge FIAP 2026 em parceria com a **Clyvo Vet** · Sprint 4
 
 | Item | Link |
 |---|---|
-| **Vídeo de apresentação** | [Assistir no YouTube](https://youtu.be/4HK56W74FiE) |
+| **Vídeo de apresentação** | [Assistir no Drive](https://drive.google.com/file/d/1rCy8p1GDnpMY0oaZ4v0zU0jqtDg3h5WN/view) |
 | **Aplicação publicada (Render)** | [clyvo-java.onrender.com](https://clyvo-java.onrender.com) |
 
 > A aplicação está no plano gratuito do Render. Se ninguém acessar por 15 minutos, ela dorme e o primeiro acesso leva cerca de 1 minuto para carregar.
