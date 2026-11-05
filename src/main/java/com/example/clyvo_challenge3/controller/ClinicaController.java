@@ -33,7 +33,7 @@ public class ClinicaController {
 
 	@GetMapping("/cadastro-clinica")
 	public ModelAndView paginaCadastroClinica() {
-		ModelAndView mv = new ModelAndView("/clinica/novaClinica");
+		ModelAndView mv = new ModelAndView("clinica/novaClinica");
 		mv.addObject("clinica", new Clinica());
 		return mv;
 	}
@@ -42,7 +42,7 @@ public class ClinicaController {
 	public ModelAndView cadastrarClinica(@Valid Clinica clinica_form, BindingResult bd) {
 
 		if (bd.hasErrors()) {
-			ModelAndView mv = new ModelAndView("/clinica/novaClinica");
+			ModelAndView mv = new ModelAndView("clinica/novaClinica");
 			mv.addObject("clinica", clinica_form);
 			return mv;
 		}
@@ -69,7 +69,7 @@ public class ClinicaController {
 
 	@GetMapping("/clinica/perfil")
 	public ModelAndView paginaPerfilClinica(Authentication auth) {
-		ModelAndView mv = new ModelAndView("/clinica/perfil");
+		ModelAndView mv = new ModelAndView("clinica/perfil");
 
 		String username = auth.getName();
 
@@ -96,7 +96,7 @@ public class ClinicaController {
 
 		Clinica infoClinicaLogada = opUsuario.get().getClinica();
 
-		ModelAndView mv = new ModelAndView("/clinica/edicao");
+		ModelAndView mv = new ModelAndView("clinica/edicao");
 
 		mv.addObject("clinica", infoClinicaLogada);
 
@@ -114,7 +114,7 @@ public class ClinicaController {
 		}
 
 		if (bd.hasErrors()) {
-			ModelAndView mv = new ModelAndView("/clinica/edicao");
+			ModelAndView mv = new ModelAndView("clinica/edicao");
 			mv.addObject("clinica", clinicaForm);
 			return mv;
 		}

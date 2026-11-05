@@ -9,7 +9,7 @@ public class AcessoNegadoController {
 	
 	@GetMapping("/acesso-negado")
 	public ModelAndView paginaAcessoNegado () {
-		return new ModelAndView("/acesso-negado");
+		return new ModelAndView("acesso-negado");
 		
 	}
 

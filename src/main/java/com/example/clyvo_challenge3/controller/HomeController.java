@@ -31,7 +31,7 @@ public class HomeController {
         }
         Usuario usuario = opUsuario.get();
         
-        ModelAndView mv = new ModelAndView("/home");
+        ModelAndView mv = new ModelAndView("home");
         
         if (usuario.getTipo()==TipoUsuarioEnum.CLINICA) {
         	Clinica clinica = usuario.getClinica();

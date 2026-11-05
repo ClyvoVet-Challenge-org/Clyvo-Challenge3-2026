@@ -79,7 +79,7 @@ public class VeterinarioController {
 		List<Veterinario> veterinarios = clinica.getVeterinarios().stream().map(ClinicaVeterinario::getVeterinario)
 				.collect(Collectors.toList());
 
-		ModelAndView mv = new ModelAndView("/clinica/veterinarios");
+		ModelAndView mv = new ModelAndView("clinica/veterinarios");
 		mv.addObject("clinica", clinica);
 		mv.addObject("veterinarios", veterinarios);
 
@@ -171,7 +171,7 @@ public class VeterinarioController {
 		Veterinario veterinarioLogado = usuario.getVeterinario();
 
 		if (bd.hasErrors()) {
-			ModelAndView mv = new ModelAndView("/veterinario/edicao");
+			ModelAndView mv = new ModelAndView("veterinario/edicao");
 
 			mv.addObject("veterinario", veterinarioForm);
 
@@ -205,7 +205,7 @@ public class VeterinarioController {
 	            opUsuario.get().getVeterinario();
 
 	    ModelAndView mv =
-	            new ModelAndView("/veterinario/perfil");
+	            new ModelAndView("veterinario/perfil");
 
 	    mv.addObject("veterinario", veterinarioLogado);
 
@@ -225,7 +225,7 @@ public class VeterinarioController {
 
 		Clinica clinica = opUsuario.get().getClinica();
 
-		ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
+		ModelAndView mv = new ModelAndView("veterinario/novoVeterinario");
 		mv.addObject("clinica", clinica);
 		mv.addObject("veterinario", new Veterinario());
 
@@ -247,7 +247,7 @@ public class VeterinarioController {
 		Clinica clinica = opUsuario.get().getClinica();
 		
 		if (bd.hasErrors()) {
-			ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
+			ModelAndView mv = new ModelAndView("veterinario/novoVeterinario");
 			mv.addObject("veterinario", veterinario);
 			mv.addObject("clinica",clinica);
 			return mv;
@@ -267,7 +267,7 @@ public class VeterinarioController {
 	// TODOS PODEM ACESSAR
 	@GetMapping("/cadastro-veterinario")
 	public ModelAndView paginaCadastroVeterinario() {
-	    ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
+	    ModelAndView mv = new ModelAndView("veterinario/novoVeterinario");
 	    mv.addObject("veterinario", new Veterinario());
 	    return mv;
 	}
@@ -276,7 +276,7 @@ public class VeterinarioController {
 	public ModelAndView cadastrarVeterinario(@Valid Veterinario veterinario_form, BindingResult bd) {
 
 		if (bd.hasErrors()) {
-			ModelAndView mv = new ModelAndView("/veterinario/novoVeterinario");
+			ModelAndView mv = new ModelAndView("veterinario/novoVeterinario");
 			mv.addObject("veterinario", veterinario_form);
 			return mv;
 		}
@@ -289,7 +289,7 @@ public class VeterinarioController {
 	// APENAS: VETERINARIO
 	@GetMapping("/vet/minhas-consultas")
 	public ModelAndView paginaConsultasDoVeterinario(Authentication authentication) {
-		ModelAndView mv = new ModelAndView("/veterinario/consultas");
+		ModelAndView mv = new ModelAndView("veterinario/consultas");
 		String username = authentication.getName();
 		
 		Optional<Usuario> opUsuario = repUsuario.findByUsername(username);
