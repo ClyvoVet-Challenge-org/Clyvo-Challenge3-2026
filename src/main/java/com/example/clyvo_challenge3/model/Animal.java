@@ -28,7 +28,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "T_CLYVO_ANIMAL")
+@Table(name = "T_CLYVO4_ANIMAL")
 public class Animal {
 
 	@Id

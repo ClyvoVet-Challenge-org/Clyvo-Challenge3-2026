@@ -25,7 +25,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "T_CLYVO_CLINICA")
+@Table(name = "T_CLYVO4_CLINICA")
 public class Clinica implements UserDetails{
 
     @Id

@@ -21,7 +21,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "T_CLYVO_MEDICAMENTO")
+@Table(name = "T_CLYVO4_MEDICAMENTO")
 public class Medicamento{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

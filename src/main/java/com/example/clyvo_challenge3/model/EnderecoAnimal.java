@@ -7,7 +7,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "T_CLYVO_ENDERECO_ANIMAL")
+@Table(name = "T_CLYVO4_ENDERECO_ANIMAL")
 public class EnderecoAnimal extends EnderecoBase {
 	
 	@OneToOne(fetch = FetchType.LAZY)

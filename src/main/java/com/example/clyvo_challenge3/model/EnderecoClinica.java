@@ -7,7 +7,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "T_CLYVO_ENDERECO_CLINICA")
+@Table(name = "T_CLYVO4_ENDERECO_CLINICA")
 public class EnderecoClinica extends EnderecoBase{
 	
 	@ManyToOne(fetch = FetchType.LAZY)

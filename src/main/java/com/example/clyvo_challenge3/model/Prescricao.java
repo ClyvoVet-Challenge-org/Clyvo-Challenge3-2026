@@ -21,7 +21,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "T_CLYVO_PRESCRICAO")
+@Table(name = "T_CLYVO4_PRESCRICAO")
 public class Prescricao {
 	
 	@Id

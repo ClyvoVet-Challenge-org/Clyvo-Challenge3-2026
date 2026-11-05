@@ -23,7 +23,7 @@ import jakarta.validation.constraints.Size;
 
 
 @Entity
-@Table(name = "T_CLYVO_RESPONSAVEL")
+@Table(name = "T_CLYVO4_RESPONSAVEL")
 public class Responsavel {
 	
 	@Id

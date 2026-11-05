@@ -22,7 +22,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "T_CLYVO_VET")
+@Table(name = "T_CLYVO4_VET")
 public class Veterinario {
 
 	@Id

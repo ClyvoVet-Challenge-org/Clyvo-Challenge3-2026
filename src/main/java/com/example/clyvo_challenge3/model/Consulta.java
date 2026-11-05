@@ -20,7 +20,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "T_CLYVO_CONSULTA")
+@Table(name = "T_CLYVO4_CONSULTA")
 public class Consulta {
 
 	@Id

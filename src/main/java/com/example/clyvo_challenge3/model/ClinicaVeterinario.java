@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "T_CLYVO_CLINICA_VET")
+@Table(name = "T_CLYVO4_CLINICA_VET")
 public class ClinicaVeterinario {
 
 	@Id
